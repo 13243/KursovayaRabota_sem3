@@ -13,7 +13,7 @@ int currentTurn = 1;
 
 #define hConsole GetStdHandle(STD_OUTPUT_HANDLE)
 #define MAX_VALUE 10000
-#define setCursor(x,y) printf("\033[%d;%dH", (y), (x))
+#define setCursor(x,y) printf  ("\033[%d;%dH", (y), (x))
 
 
 enum difficultyLevel { EASY = 1, MEDIUM = 3, HARD = 5 };
