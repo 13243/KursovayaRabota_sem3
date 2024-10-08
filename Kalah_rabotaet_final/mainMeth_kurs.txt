@@ -1,0 +1,507 @@
+int WINAPI WinMain(HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPSTR lpCmdLine,
+	int nCmdShow)
+{
+	WNDCLASSEX wcex;
+	HWND hwnd;
+	HDC hDC;
+	HGLRC hRC;
+	MSG msg;
+	BOOL bQuit = FALSE;
+	float rotationAngle = 0.0f;
+
+	/* register window class */
+	wcex.cbSize = sizeof(WNDCLASSEX);
+	wcex.style = CS_OWNDC;
+	wcex.lpfnWndProc = windowProcedure;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = hInstance;
+	wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wcex.lpszMenuName = NULL;
+	wcex.lpszClassName = "IGRA";
+	wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);;
+
+
+	if (!RegisterClassEx(&wcex))
+		return 0;
+
+	/* create main window */
+	hwnd = CreateWindowEx(0,
+		"IGRA",
+		"IGRA",
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		1080, 
+		800, 
+		NULL,
+		NULL,
+		hInstance,
+		NULL);
+
+	ShowWindow(hwnd, nCmdShow);
+
+
+	enableOpenGL(hwnd, &hDC, &hRC);
+
+
+	while (!bQuit)
+	{
+
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+
+			if (msg.message == WM_QUIT)
+			{
+				bQuit = TRUE;
+			}
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+
+
+			char board[100] = "";
+			int k = 0;
+			int count = 0;
+			int len[14] = { 0 };
+			for (k; k < 7; k++) {
+				switch (initialBoard[k]) {
+				case 1: board[count + 1] = '1'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 2: board[count + 1] = '2'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 3: board[count + 1] = '3'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 4: board[count + 1] = '4'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 5: board[count + 1] = '5'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 6: board[count + 1] = '6'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 7: board[count + 1] = '7'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 8: board[count + 1] = '8'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 9: board[count + 1] = '9'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 0: board[count + 1] = '0'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 10: board[count + 1] = '0'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 11: board[count + 1] = '1'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 12: board[count + 1] = '2'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 13: board[count + 1] = '3'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 14: board[count + 1] = '4'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 15: board[count + 1] = '5'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 16: board[count + 1] = '6'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 17: board[count + 1] = '7'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 18: board[count + 1] = '8'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 19: board[count + 1] = '9'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 20: board[count + 1] = '0'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 21: board[count + 1] = '1'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 22: board[count + 1] = '2'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 23: board[count + 1] = '3'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 24: board[count + 1] = '4'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 25: board[count + 1] = '5'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 26: board[count + 1] = '6'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 27: board[count + 1] = '7'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 28: board[count + 1] = '8'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 29: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 30: board[count + 1] = '0'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 31: board[count + 1] = '1'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 32: board[count + 1] = '2'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 33: board[count + 1] = '3'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 34: board[count + 1] = '4'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 35: board[count + 1] = '5'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 36: board[count + 1] = '6'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 37: board[count + 1] = '7'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 38: board[count + 1] = '8'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 39: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 40: board[count + 1] = '0'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 41: board[count + 1] = '1'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 42: board[count + 1] = '2'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 43: board[count + 1] = '3'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 44: board[count + 1] = '4'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 45: board[count + 1] = '5'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 46: board[count + 1] = '6'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 47: board[count + 1] = '7'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 48: board[count + 1] = '8'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 49: board[count + 1] = '9'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 50: board[count + 1] = '0'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 51: board[count + 1] = '1'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 52: board[count + 1] = '2'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 53: board[count + 1] = '3'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 54: board[count + 1] = '4'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 55: board[count + 1] = '5'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 56: board[count + 1] = '6'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 57: board[count + 1] = '7'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 58: board[count + 1] = '8'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 59: board[count + 1] = '9'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 60: board[count + 1] = '0'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 61: board[count + 1] = '1'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 62: board[count + 1] = '2'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 63: board[count + 1] = '3'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 64: board[count + 1] = '4'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 65: board[count + 1] = '5'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 66: board[count + 1] = '6'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 67: board[count + 1] = '7'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 68: board[count + 1] = '8'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 69: board[count + 1] = '9'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 70: board[count + 1] = '0'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 71: board[count + 1] = '1'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 72: board[count + 1] = '2'; board[count] = '7'; count += 2; len[k] = 2; break;
+				}
+			}
+
+			for (k; k < 13; k++) {
+				switch (initialBoard[k]) {
+				case 1: board[count + 1] = '0'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 2: board[count + 1] = '0'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 3: board[count + 1] = '0'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 4: board[count + 1] = '0'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 5: board[count + 1] = '0'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 6: board[count + 1] = '0'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 7: board[count + 1] = '0'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 8: board[count + 1] = '0'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 9: board[count + 1] = '0'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 0: board[count + 1] = '0'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 10: board[count + 1] = '1'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 11: board[count + 1] = '1'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 12: board[count + 1] = '1'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 13: board[count + 1] = '1'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 14: board[count + 1] = '1'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 15: board[count + 1] = '1'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 16: board[count + 1] = '1'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 17: board[count + 1] = '1'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 18: board[count + 1] = '1'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 19: board[count + 1] = '1'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 20: board[count + 1] = '2'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 21: board[count + 1] = '2'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 22: board[count + 1] = '2'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 23: board[count + 1] = '2'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 24: board[count + 1] = '2'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 25: board[count + 1] = '2'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 26: board[count + 1] = '2'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 27: board[count + 1] = '2'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 28: board[count + 1] = '2'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 29: board[count + 1] = '2'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 30: board[count + 1] = '3'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 31: board[count + 1] = '3'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 32: board[count + 1] = '3'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 33: board[count + 1] = '3'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 34: board[count + 1] = '3'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 35: board[count + 1] = '3'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 36: board[count + 1] = '3'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 37: board[count + 1] = '3'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 38: board[count + 1] = '3'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 39: board[count + 1] = '3'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 40: board[count + 1] = '4'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 41: board[count + 1] = '4'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 42: board[count + 1] = '4'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 43: board[count + 1] = '4'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 44: board[count + 1] = '4'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 45: board[count + 1] = '4'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 46: board[count + 1] = '4'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 47: board[count + 1] = '4'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 48: board[count + 1] = '4'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 49: board[count + 1] = '4'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 50: board[count + 1] = '5'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 51: board[count + 1] = '5'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 52: board[count + 1] = '5'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 53: board[count + 1] = '5'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 54: board[count + 1] = '5'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 55: board[count + 1] = '5'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 56: board[count + 1] = '5'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 57: board[count + 1] = '5'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 58: board[count + 1] = '5'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 59: board[count + 1] = '5'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 60: board[count + 1] = '6'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 61: board[count + 1] = '6'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 62: board[count + 1] = '6'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 63: board[count + 1] = '6'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 64: board[count + 1] = '6'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 65: board[count + 1] = '6'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 66: board[count + 1] = '6'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 67: board[count + 1] = '6'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 68: board[count + 1] = '6'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 69: board[count + 1] = '6'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 70: board[count + 1] = '7'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 71: board[count + 1] = '7'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 72: board[count + 1] = '7'; board[count] = '2'; count += 2; len[k] = 2; break;
+				}
+			}
+
+			for (k; k < 14; k++) {
+				switch (initialBoard[k]) {
+				case 1: board[count + 1] = '1'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 2: board[count + 1] = '2'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 3: board[count + 1] = '3'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 4: board[count + 1] = '4'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 5: board[count + 1] = '5'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 6: board[count + 1] = '6'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 7: board[count + 1] = '7'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 8: board[count + 1] = '8'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 9: board[count + 1] = '9'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 0: board[count + 1] = '0'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 10: board[count + 1] = '0'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 11: board[count + 1] = '1'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 12: board[count + 1] = '2'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 13: board[count + 1] = '3'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 14: board[count + 1] = '4'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 15: board[count + 1] = '5'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 16: board[count + 1] = '6'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 17: board[count + 1] = '7'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 18: board[count + 1] = '8'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 19: board[count + 1] = '9'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 20: board[count + 1] = '0'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 21: board[count + 1] = '1'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 22: board[count + 1] = '2'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 23: board[count + 1] = '3'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 24: board[count + 1] = '4'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 25: board[count + 1] = '5'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 26: board[count + 1] = '6'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 27: board[count + 1] = '7'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 28: board[count + 1] = '8'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 29: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 30: board[count + 1] = '0'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 31: board[count + 1] = '1'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 32: board[count + 1] = '2'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 33: board[count + 1] = '3'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 34: board[count + 1] = '4'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 35: board[count + 1] = '5'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 36: board[count + 1] = '6'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 37: board[count + 1] = '7'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 38: board[count + 1] = '8'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 39: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 40: board[count + 1] = '0'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 41: board[count + 1] = '1'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 42: board[count + 1] = '2'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 43: board[count + 1] = '3'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 44: board[count + 1] = '4'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 45: board[count + 1] = '5'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 46: board[count + 1] = '6'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 47: board[count + 1] = '7'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 48: board[count + 1] = '8'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 49: board[count + 1] = '9'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 50: board[count + 1] = '0'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 51: board[count + 1] = '1'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 52: board[count + 1] = '2'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 53: board[count + 1] = '3'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 54: board[count + 1] = '4'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 55: board[count + 1] = '5'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 56: board[count + 1] = '6'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 57: board[count + 1] = '7'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 58: board[count + 1] = '8'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 59: board[count + 1] = '9'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 60: board[count + 1] = '0'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 61: board[count + 1] = '1'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 62: board[count + 1] = '2'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 63: board[count + 1] = '3'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 64: board[count + 1] = '4'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 65: board[count + 1] = '5'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 66: board[count + 1] = '6'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 67: board[count + 1] = '7'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 68: board[count + 1] = '8'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 69: board[count + 1] = '9'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 70: board[count + 1] = '0'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 71: board[count + 1] = '1'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 72: board[count + 1] = '2'; board[count] = '7'; count += 2; len[k] = 2; break;
+				}
+			}
+
+
+			board[count] = '\n';
+
+			k = 0;
+			int count1 = 0;
+			int count2 = 0;
+			char Nizh[50] = "";
+			count1 = 0;
+			for (k; k < 6; k++) {
+				if (len[k] == 1) {
+					Nizh[count1] = board[count2];
+					Nizh[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					Nizh[count1] = board[count2];
+					Nizh[count1 + 1] = board[count2 + 1];
+					Nizh[count1 + 2] = '\n';
+					Nizh[count1 + 2] = '\n';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			Nizh[count1] = '\n';
+			char RightKalah[50] = "";
+			count1 = 0;
+			for (k; k < 7; k++) {
+				if (len[k] == 1) {
+					RightKalah[count1] = board[count2];
+					RightKalah[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					RightKalah[count1] = board[count2];
+					RightKalah[count1 + 1] = board[count2 + 1];
+					RightKalah[count1 + 2] = ' ';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			RightKalah[count1] = '\n';
+			count1 = 0;
+			char Verh[50] = "";
+
+			for (k; k < 13; k++) {
+				if (len[k] == 1) {
+					Verh[count1] = board[count2];
+					Verh[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					Verh[count1] = board[count2];
+					Verh[count1 + 1] = board[count2 + 1];
+					Verh[count1 + 2] = '\n';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			Verh[count1] = '\n';
+			char LeftKalah[50] = "";
+			count1 = 0;
+			for (k; k < 14; k++) {
+				if (len[k] == 1) {
+					LeftKalah[count1] = board[count2];
+					LeftKalah[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					LeftKalah[count1] = board[count2];
+					LeftKalah[count1 + 1] = board[count2 + 1];
+					LeftKalah[count1 + 2] = ' ';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			LeftKalah[count1] = '\n';
+
+			_strrev(Verh);
+
+			glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			glPushMatrix();
+
+			glScalef(0.015, -0.015, 1);
+			renderText(-30, -40.5, "6", 0.7, 0.48, 0.55);
+			renderText(-30, -30, "5", 0.7, 0.48, 0.55);
+			renderText(-30, -19, "4", 0.7, 0.48, 0.55);
+			renderText(-30, -8, "3", 0.7, 0.48, 0.55);
+			renderText(-30, 2, "2", 0.7, 0.48, 0.55);
+			renderText(-30, 13, "1", 0.7, 0.48, 0.55);
+
+			renderText(13, -40.5, "1", 0.7, 0.48, 0.55);
+			renderText(13, -30, "2", 0.7, 0.48, 0.55);
+			renderText(13, -19, "3", 0.7, 0.48, 0.55);
+			renderText(13, -8, "4", 0.7, 0.48, 0.55);
+			renderText(13, 2, "5", 0.7, 0.48, 0.55);
+			renderText(13, 13, "6", 0.7, 0.48, 0.55);
+			renderText(-11, -50, LeftKalah, 0.5, 0, 0);
+			renderText(-11, 22, RightKalah, 0, 0.5, 0);
+			glScalef(0.8, 0.9, 0.5);
+			renderText(-25, -69, Verh, 0.5, 0, 0);
+			renderText(0, -45, Nizh, 0, 0.5, 0);
+			if (currentPlayerResponse == 0) {
+				displayMenu();
+				glScalef(0.5, 0.5, 1);
+				renderText(-130, -145.8, "Player", 1, 1, 1);
+				renderText(-130, -130, "Computer", 1, 1, 1);
+				renderText(-130, -114.2, "Exit", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 1) {
+				displayMenu();
+				glScalef(0.5, 0.5, 1);
+				renderText(-132, -145.8, "6", 1, 1, 1);
+				renderText(-132, -130, "5", 1, 1, 1);
+				renderText(-132, -114.2, "4", 1, 1, 1);
+				renderText(-132, -98.4, "3", 1, 1, 1);
+				renderText(-132, -82.6, "2", 1, 1, 1);
+				renderText(-132, -66.8, "1", 1, 1, 1);
+				renderText(140, -145.8, "1", 1, 1, 1);
+				renderText(140, -130, "2", 1, 1, 1);
+				renderText(140, -114.2, "3", 1, 1, 1);
+				renderText(140, -98.4, "4", 1, 1, 1);
+				renderText(140, -82.6, "5", 1, 1, 1);
+				renderText(140, -66.8, "6", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 2) {
+				displayMenu();
+				glScalef(0.5, 0.5, 1);
+				renderText(-130, -145.8, "Hard", 1, 1, 1);
+				renderText(-130, -130, "Medium", 1, 1, 1);
+				renderText(-130, -114.2, "Easy", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 3) {
+				glScalef(0.5, 0.5, 1);
+				renderText(-130, -145.8, "Computer move", 1, 1, 1);
+				renderText(140, -145.8, "1", 1, 1, 1);
+				renderText(140, -130, "2", 1, 1, 1);
+				renderText(140, -114.2, "3", 1, 1, 1);
+				renderText(140, -98.4, "4", 1, 1, 1);
+				renderText(140, -82.6, "5", 1, 1, 1);
+				renderText(140, -66.8, "6", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 1) {
+				displayGameButtons();
+				if (checkEmpty == 1) {
+					renderText(-40, 100, "Player B wins", 0, 0.5, 0);
+				}
+				if (checkEmpty == 2) {
+					renderText(-40, 100, "Player A wins", 0.5, 0, 0);
+				}
+				if (checkEmpty == 3) {
+					renderText(-40, 100, "Draw", 0, 1, 1);
+				}
+			}
+			if (currentPlayerResponse == 3) {
+				displaySecondaryMenu();
+				if (checkEmpty == 1) {
+					renderText(-40, 100, "Player Computer (B) wins", 0, 0.5, 0);
+				}
+				if (checkEmpty == 2) {
+					renderText(-40, 100, "Player A wins", 0.5, 0, 0);
+				}
+				if (checkEmpty == 3) {
+					renderText(-40, 100, "Draw", 0, 1, 1);
+				}
+			}
+
+			if (gameFlag == 1) {
+				renderText(-65, 100, "Make one more currentTurn", 0, 0.5, 0);
+				gameFlag = 0;
+			}
+
+			if (currentPlayerResponse == 3 && side == B) {
+				renderText(-65, 80, "Press Computer move", 0.5, 0.5, 0.5);
+			}
+			if (currentPlayerResponse == 3 && side == A) {
+				renderText(-47, 80, "Player move", 0.5, 0.5, 0.5);
+			}
+
+			glPopMatrix();
+			SwapBuffers(hDC);
+
+		}
+	}
+
+
+	disableOpenGL(hwnd, hDC, hRC);
+
+
+	DestroyWindow(hwnd);
+
+	return msg.wParam;
+}

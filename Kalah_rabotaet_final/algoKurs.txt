@@ -1,0 +1,255 @@
+LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_CLOSE:
+		PostQuitMessage(0);
+		break;
+
+	case WM_LBUTTONDOWN:
+		if (currentPlayerResponse == 0 || currentPlayerResponse == 2) {
+			for (int i = 0; i < 4; i++)
+				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), buttons[i])) {
+					if ((strcmp(buttons[i].name, "quit") == 0) && (currentPlayerResponse == 0))
+						PostQuitMessage(0);
+					else if ((strcmp(buttons[i].name, "players") == 0) && (currentPlayerResponse == 0))
+						currentPlayerResponse = 1;
+					else if ((strcmp(buttons[i].name, "computer") == 0) && (currentPlayerResponse == 0)) {
+						currentPlayerResponse = 2;
+					}
+					else if ((strcmp(buttons[i].name, "quit") == 0) && (currentPlayerResponse == 2)) {
+						currentPlayerResponse = 3;
+						maxSearchDepth = EASY;
+					}
+					else if ((strcmp(buttons[i].name, "players") == 0) && (currentPlayerResponse == 2)) {
+						currentPlayerResponse = 3;
+						maxSearchDepth = MEDIUM;
+					}
+					else if ((strcmp(buttons[i].name, "computer") == 0) && (currentPlayerResponse == 2)) {
+						currentPlayerResponse = 3;
+						maxSearchDepth = HARD;
+					}
+				}
+		}
+
+
+		else if (currentPlayerResponse == 1) {
+			for (int i = 0; i < 12; i++)
+				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
+					if ((strcmp(gameButtons[i].name, "11") == 0) && (side == B) && (initialBoard[12] != 0)) {
+						int output = performTurn(initialBoard, 13);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "12") == 0) && (side == B) && (initialBoard[11] != 0)) {
+						int output = performTurn(initialBoard, 12);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "13") == 0) && (side == B) && (initialBoard[10] != 0)) {
+						int output = performTurn(initialBoard, 11);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "14") == 0) && (side == B) && (initialBoard[9] != 0)) {
+						int output = performTurn(initialBoard, 10);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "15") == 0) && (side == B) && (initialBoard[8] != 0)) {
+						int output = performTurn(initialBoard, 9);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "16") == 0) && (side == B) && (initialBoard[7] != 0)) {
+						int output = performTurn(initialBoard, 8);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "21") == 0) && (side == A) && (start == 1) && (initialBoard[0] != 0)) {
+						int output = performTurn(initialBoard, 1);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "22") == 0) && (side == A) && (initialBoard[1] != 0)) { //
+						int output = performTurn(initialBoard, 2);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "23") == 0) && (side == A) && (initialBoard[2] != 0)) {
+						int output = performTurn(initialBoard, 3);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "24") == 0) && (side == A) && (initialBoard[3] != 0)) {
+						int output = performTurn(initialBoard, 4);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "25") == 0) && (side == A) && (initialBoard[4] != 0)) {
+						int output = performTurn(initialBoard, 5);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "26") == 0) && (side == A) && (initialBoard[5] != 0)) {
+						int output = performTurn(initialBoard, 6);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+				}
+		}
+		else if (currentPlayerResponse == 3) {
+			for (int i = 0; i < 12; i++)
+				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
+					if ((strcmp(gameButtons[i].name, "21") == 0) && (side == A) && (start == 1) && (initialBoard[0] != 0)) {
+						int output = performTurn(initialBoard, 1);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "22") == 0) && (side == A) && (initialBoard[1] != 0)) { //
+						int output = performTurn(initialBoard, 2);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "23") == 0) && (side == A) && (initialBoard[2] != 0)) {
+						int output = performTurn(initialBoard, 3);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "24") == 0) && (side == A) && (initialBoard[3] != 0)) {
+						int output = performTurn(initialBoard, 4);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "25") == 0) && (side == A) && (initialBoard[4] != 0)) {
+						int output = performTurn(initialBoard, 5);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "26") == 0) && (side == A) && (initialBoard[5] != 0)) {
+						int output = performTurn(initialBoard, 6);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((side == B) && (strcmp(gameButtons[i].name, "11") == 0)) {
+						int computerTurn = determineBestTurn(initialBoard);
+						int output = performSingleTurn(initialBoard, computerTurn + 7);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						else { gameFlag = 1; }
+					}
+				}
+		}
+
+
+		break;
+
+	case WM_MOUSEMOVE:
+		for (int i = 0; i < 14; i++)
+			buttons[i].hover = isPointInButton(LOWORD(lParam), HIWORD(lParam), buttons[i]);
+		break;
+
+	case WM_SIZE:
+		windowWidth = LOWORD(lParam);
+		windowHeight = HIWORD(lParam);
+		glViewport(0, 0, windowWidth, windowHeight);
+		glLoadIdentity();
+		float k = windowWidth / (float)windowHeight;
+		glOrtho(-k, k, -1, 1, -1, 1);
+		break;
+
+	case WM_DESTROY:
+		return 0;
+
+	case WM_KEYDOWN:
+	{
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+			break;
+		}
+	}
+	break;
+
+	default:
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	}
+
+	return 0;
+}

@@ -1,0 +1,1206 @@
+#include <windows.h>
+#include <gl/gl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include < string.h >
+#include <windows.h>
+#include <C:\Users\katle\OneDrive\Desktop\C Programs\CS_sem2\stb_easy_font.h>
+#define _CRT_SECURE_NO_WARNINGS
+
+int currentTurn = 1;
+
+#define hConsole GetStdHandle(STD_OUTPUT_HANDLE)
+#define MAX_VALUE 10000
+#define setCursor(x,y) printf("\033[%d;%dH", (y), (x))
+
+
+enum difficultyLevel { EASY = 1, MEDIUM = 3, HARD = 5 };
+enum SIDE { A, B };
+
+enum difficultyLevel maxSearchDepth = EASY;
+
+int initializeGame(void);    // select game parameters
+int performTurn(int*, int); // scatters stones to cells
+int determineBestTurn(int*); // initial function to start calculating best currentTurn
+int alphaBetaPruning(int*, int, enum SIDE, int, int); // main algorythm to calculate the best currentTurn for computer
+int evaluateBoard(int*); // evaluateBoard terminal position
+int getMaxAlpha(int, int); // find alpha
+int getMinBeta(int, int); // find beta
+char displayError(int type);
+void distributeRemainingStones(int* board);
+
+void renderText(float x, float y, char* text, float r, float g, float b) {
+	static char buffer[99999]; // ~500 chars
+	int num_quads;
+
+	num_quads = stb_easy_font_print(x, y, text, NULL, buffer, sizeof(buffer));
+
+	glColor3f(r, g, b);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 16, buffer);
+	glDrawArrays(GL_QUADS, 0, num_quads * 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+int performSingleTurn(int* board, int move) {
+
+	int i, stones, repeatTurn = 0;
+
+	i = --move;
+	stones = board[i];
+	board[i] = 0;
+
+	while (stones--) {
+		i++;
+		board[i]++;
+		if ((move > 6 && i == 6) || (move < 6 && i == 13)) { // moving around the table
+			board[i]--;
+			stones++;
+		}
+
+		if (i == 13 && stones > 0) i = -1;
+	}
+
+	if ((board[i] == 1 && board[12 - i]) && // check Kalah rule 1.3 - if last stone is in the mover's free cell
+		((move < 6 && i < 6) || (move > 6 && i > 6 && i < 13))) {  // and the opposite cell is not empty
+		if (move > 6) stones = 13;
+		else stones = 6;
+
+		board[stones] = board[stones] + board[i] + board[12 - i];
+		board[i] = board[12 - i] = 0;
+	}
+
+	if (move < 6 && i == 6 || move > 6 && i == 13) repeatTurn = 1; // rule 1.2 - if last stone is in Kalah, make a move again
+	return repeatTurn;
+}
+
+int checkEmptySideSingleTurn(int* board) {
+	int i;
+	int j;
+	char game;
+	int nonEmptySideA = 0;
+	int nonEmptySideB = 0;
+
+	for (i = 0; i < 6; i++) if (board[i]) nonEmptySideA = 1;
+	for (i = 7; i < 13; i++) if (board[i]) nonEmptySideB = 1;
+
+	if (!nonEmptySideA || !nonEmptySideB) nonEmptySideA = 0;
+
+	if (nonEmptySideA) return nonEmptySideA;
+
+	else {
+		distributeRemainingStones(board);
+	}
+
+}
+
+
+int performTurn(int* board, int move) {
+
+	currentTurn = 0;
+	int i, stones, repeatTurn = 0;
+	i = --move;
+	stones = board[i];
+	board[i] = 0;
+
+	while (stones--) {
+		i++;
+		board[i]++;
+		if ((move > 6 && i == 6) || (move < 6 && i == 13)) { // moving around the table
+			board[i]--;
+			stones++;
+		}
+		if (i == 13 && stones > 0) i = -1;
+	}
+
+	if ((board[i] == 1 && board[12 - i]) && // check Kalah rule 1.3 - if last stone is in the mover's free cell
+		((move < 6 && i < 6) || (move > 6 && i > 6 && i < 13))) {  // and the opposite cell is not empty
+		if (move > 6) stones = 13;
+		else stones = 6;
+
+		board[stones] = board[stones] + board[i] + board[12 - i];
+		board[i] = board[12 - i] = 0;
+	}
+
+	if (move < 6 && i == 6 || move > 6 && i == 13) repeatTurn = 1; // rule 1.2 - if last stone is in Kalah, make a move again
+	return repeatTurn;
+}
+
+int initialBoard[14] = { 6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 0 };
+
+
+int checkEmptySide(int* initialBoard) {
+	int i;
+	int nonEmptySideA = 0;
+	int nonEmptySideB = 0;
+
+	for (i = 0; i < 6; i++) if (initialBoard[i]) nonEmptySideA = 1;
+	for (i = 7; i < 13; i++) if (initialBoard[i]) nonEmptySideB = 1;
+
+	if (nonEmptySideA && nonEmptySideB) { return 0; }
+	else {
+		distributeRemainingStones(initialBoard);
+
+		if (initialBoard[6] > initialBoard[13]) return 1;
+		else if (initialBoard[6] < initialBoard[13]) {
+			return 2;
+		}
+		else return 3;
+	}
+}
+
+void distributeRemainingStones(int* board) {
+	int i = 0;
+	int j = 0;
+	for (i = 7, j = 0; i < 13 && j < 6; i++, j++) {
+		board[6] += board[j]; board[j] = 0;
+		board[13] += board[i]; board[i] = 0;
+	}
+}
+
+int evaluateBoard(int* board) {
+	currentTurn = 1;
+	int stonesPlayerA = 0;
+	int stonesPlayerB = 0;
+	int i = 0;
+
+	for (i = 0; i < 6; i++) stonesPlayerB += board[i];
+	for (i = 7; i < 13; i++) stonesPlayerA += board[i];
+
+	return ((board[13] - board[6]) * 100 + stonesPlayerA - stonesPlayerB);
+	//return (board[13] - board[6]);
+}
+
+int determineBestTurn(int* board) {
+	currentTurn = 1;
+	int move = 0;
+	int j = 0;
+	int k = 0;
+	int score;
+	int best = -MAX_VALUE;
+	int simulatedBoard[14];
+	int bestMove = 0;
+
+	for (move = 12; move > 6; move--) {
+		for (j = 0; j < 14; j++) simulatedBoard[j] = board[j]; // copy board
+		if (simulatedBoard[move] > 0) {
+			k = performSingleTurn(simulatedBoard, (move + 1));
+			if (!checkEmptySideSingleTurn(simulatedBoard)) {
+				distributeRemainingStones(simulatedBoard);
+				score = evaluateBoard(simulatedBoard);
+			}
+			else {
+				if (k == 1) {
+					score = alphaBetaPruning(simulatedBoard, maxSearchDepth, B, -MAX_VALUE, MAX_VALUE);
+				}
+				else {
+					score = alphaBetaPruning(simulatedBoard, maxSearchDepth - 1, A, -MAX_VALUE, MAX_VALUE);
+				}
+			}
+			if (score > best) {
+				best = score;
+				bestMove = move + 1;
+			}
+		}
+	}
+	return (bestMove - 7);
+}
+
+int alphaBetaPruning(int* board, int curDepth, enum SIDE side, int alpha, int beta) {
+	currentTurn = 1;
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int move = 0;
+	int score = 0;
+	int simulatedBoard[14];
+	int best = -MAX_VALUE;
+
+	if (curDepth == 0) return evaluateBoard(board);
+
+	if (side == B) {
+		for (move = 12; move > 6; move--) {
+			for (i = 0; i < 14; i++) simulatedBoard[i] = board[i]; // copy board
+			if (simulatedBoard[move] > 0) {
+				k = performSingleTurn(simulatedBoard, (move + 1));
+				if (!checkEmptySideSingleTurn(simulatedBoard)) {
+					distributeRemainingStones(simulatedBoard);
+					score = evaluateBoard(simulatedBoard);
+				}
+				else {
+					if (k == 1) score = alphaBetaPruning(simulatedBoard, curDepth, side, alpha, beta);
+					else score = alphaBetaPruning(simulatedBoard, curDepth - 1, A, alpha, beta);
+				}
+				if (score > best) {
+					best = score;
+					alpha = getMaxAlpha(alpha, best);
+					if (alpha >= beta) return alpha;
+				}
+			}
+		}
+	}
+
+	else if (side == A) {
+		currentTurn = 1;
+		best = MAX_VALUE;
+		for (move = 5; move >= 0; move--) {
+			for (i = 0; i < 14; i++) simulatedBoard[i] = board[i]; // copy board
+			if (simulatedBoard[move] > 0) {
+				k = performSingleTurn(simulatedBoard, (move + 1));
+				if (!checkEmptySideSingleTurn(simulatedBoard)) {
+					distributeRemainingStones(simulatedBoard);
+					score = evaluateBoard(simulatedBoard);
+				}
+				else {
+					if (k == 1) score = alphaBetaPruning(simulatedBoard, curDepth, side, alpha, beta);
+					else score = alphaBetaPruning(simulatedBoard, curDepth - 1, B, alpha, beta);
+				}
+				if (score < best) {
+					best = score;
+					beta = getMinBeta(beta, best);
+					if (beta <= alpha) return beta;
+				}
+			}
+		}
+	}
+	return best;
+}
+
+int getMaxAlpha(int alpha, int best) {
+	currentTurn == 1;
+	if (alpha > best) return alpha;
+	else return best;
+}
+
+int getMinBeta(int beta, int best) {
+	currentTurn == 1;
+	if (beta < best) return beta;
+	else return best;
+}
+
+char displayError(int type) {
+	char msg[100];
+	switch (type) {
+	case 2: {
+		*msg = "displayError: Cell is empty. Press Enter to continue.";
+		break;
+	}
+	case 3: {
+		*msg = "displayError: Invalid command. Press Enter to continue.";
+		break;
+	}
+	case 4: {
+		*msg = "displayError: Invalid difficultyLevel. Press Enter to continue.";
+		break;
+	}
+	case 5: {
+		*msg = "displayError: Invalid command. Press Enter to continue.";
+		break;
+	}
+	case 6: {
+		*msg = "displayError: Invalid first move. Press Enter to continue.";
+		break;
+	}
+	}
+	return *msg;
+}
+
+#pragma comment(lib, "opengl32.lib")
+
+LRESULT CALLBACK windowProcedure(HWND, UINT, WPARAM, LPARAM);
+void enableOpenGL(HWND hwnd, HDC*, HGLRC*);
+void disableOpenGL(HWND, HDC, HGLRC);
+
+int windowWidth, windowHeight;
+
+
+typedef struct {
+	char name[20];
+	float vert[8];
+	BOOL hover;
+} Button;
+
+Button buttons[] = {
+	{"players", {0,0,100,0,100,30,0,30}, FALSE},
+	{"computer", {0,40,100,40,100,70,0,70}, FALSE},
+	{"quit", {0,80,100,80,100,110,0,110}, FALSE}
+};
+
+void displayButton(Button buttons)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+glColor3f(0, 0.5, 0);
+	glVertexPointer(2, GL_FLOAT, 0, buttons.vert);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+
+BOOL isPointInButton(int x, int y, Button buttons)
+{
+	return (x > buttons.vert[0]) && (x < buttons.vert[4]) &&
+		(y > buttons.vert[1]) && (y < buttons.vert[5]);
+}
+
+
+void displayMenu()
+{
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, windowWidth, windowHeight, 0, -1, 1);
+	for (int i = 0; i < 3; i++) // btnCnt = 3
+		displayButton(buttons[i]);
+	glPopMatrix();
+}
+
+Button gameButtons[] = {
+	{"11", {0,0,100,0,100,30,0,30}, FALSE},
+	{"12", {0,40,100,40,100,70,0,70}, FALSE},
+	{"13", {0,80,100,80,100,110,0,110}, FALSE},
+	{"14", {0,120,100,120,100,150,0,150}, FALSE},
+	{"15", {0,160,100,160,100,190,0,190}, FALSE},
+	{"16", {0,200,100,200,100,230,0,230}, FALSE},
+	{"21", {1000,0,1100,0,1100,30,1000,30}, FALSE},
+	{"22", {1000,40,1100,40,1100,70,1000,70}, FALSE},
+	{"23", {1000,80,1100,80,1100,110,1000,110}, FALSE},
+	{"24", {1000,120,1100,120,1100,150,1000,150}, FALSE},
+	{"25", {1000,160,1100,160,1100,190,1000,190}, FALSE},
+	{"26", {1000,200,1100,200,1100,230,1000,230}, FALSE},
+};
+
+
+void displayGameButtons()
+{
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, windowWidth, windowHeight, 0, -1, 1);
+	for (int i = 0; i < 12; i++) // btnCnt = 3
+		displayButton(gameButtons[i]);
+	glPopMatrix();
+}
+
+
+void displaySecondaryMenu()
+{
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, windowWidth, windowHeight, 0, -1, 1);
+	displayButton(gameButtons[0]);
+	for (int i = 6; i < 12; i++) // btnCnt = 3
+		displayButton(gameButtons[i]);
+	glPopMatrix();
+}
+
+
+//                  
+
+
+
+int gameFlag = 0;
+
+enum SIDE side = A;
+int currentPlayerResponse = 0;
+int start = 0;
+int checkEmpty = 0;
+int difficultyLevel = 0;
+
+int WINAPI WinMain(HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPSTR lpCmdLine,
+	int nCmdShow)
+{
+	WNDCLASSEX wcex;
+	HWND hwnd;
+	HDC hDC;
+	HGLRC hRC;
+	MSG msg;
+	BOOL bQuit = FALSE;
+	float rotationAngle = 0.0f;
+
+	/* register window class */
+	wcex.cbSize = sizeof(WNDCLASSEX);
+	wcex.style = CS_OWNDC;
+	wcex.lpfnWndProc = windowProcedure;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = hInstance;
+	wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wcex.lpszMenuName = NULL;
+	wcex.lpszClassName = "IGRA";
+	wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);;
+
+
+	if (!RegisterClassEx(&wcex))
+		return 0;
+
+	/* create main window */
+	hwnd = CreateWindowEx(0,
+		"IGRA",
+		"IGRA",
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		1080, 
+		800, 
+		NULL,
+		NULL,
+		hInstance,
+		NULL);
+
+	ShowWindow(hwnd, nCmdShow);
+
+
+	enableOpenGL(hwnd, &hDC, &hRC);
+
+
+	while (!bQuit)
+	{
+
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+
+			if (msg.message == WM_QUIT)
+			{
+				bQuit = TRUE;
+			}
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+
+
+			char board[100] = "";
+			int k = 0;
+			int count = 0;
+			int len[14] = { 0 };
+			for (k; k < 7; k++) {
+				switch (initialBoard[k]) {
+				case 1: board[count + 1] = '1'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 2: board[count + 1] = '2'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 3: board[count + 1] = '3'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 4: board[count + 1] = '4'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 5: board[count + 1] = '5'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 6: board[count + 1] = '6'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 7: board[count + 1] = '7'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 8: board[count + 1] = '8'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 9: board[count + 1] = '9'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 0: board[count + 1] = '0'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 10: board[count + 1] = '0'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 11: board[count + 1] = '1'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 12: board[count + 1] = '2'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 13: board[count + 1] = '3'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 14: board[count + 1] = '4'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 15: board[count + 1] = '5'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 16: board[count + 1] = '6'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 17: board[count + 1] = '7'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 18: board[count + 1] = '8'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 19: board[count + 1] = '9'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 20: board[count + 1] = '0'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 21: board[count + 1] = '1'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 22: board[count + 1] = '2'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 23: board[count + 1] = '3'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 24: board[count + 1] = '4'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 25: board[count + 1] = '5'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 26: board[count + 1] = '6'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 27: board[count + 1] = '7'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 28: board[count + 1] = '8'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 29: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 30: board[count + 1] = '0'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 31: board[count + 1] = '1'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 32: board[count + 1] = '2'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 33: board[count + 1] = '3'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 34: board[count + 1] = '4'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 35: board[count + 1] = '5'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 36: board[count + 1] = '6'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 37: board[count + 1] = '7'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 38: board[count + 1] = '8'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 39: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 40: board[count + 1] = '0'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 41: board[count + 1] = '1'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 42: board[count + 1] = '2'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 43: board[count + 1] = '3'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 44: board[count + 1] = '4'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 45: board[count + 1] = '5'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 46: board[count + 1] = '6'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 47: board[count + 1] = '7'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 48: board[count + 1] = '8'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 49: board[count + 1] = '9'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 50: board[count + 1] = '0'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 51: board[count + 1] = '1'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 52: board[count + 1] = '2'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 53: board[count + 1] = '3'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 54: board[count + 1] = '4'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 55: board[count + 1] = '5'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 56: board[count + 1] = '6'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 57: board[count + 1] = '7'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 58: board[count + 1] = '8'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 59: board[count + 1] = '9'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 60: board[count + 1] = '0'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 61: board[count + 1] = '1'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 62: board[count + 1] = '2'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 63: board[count + 1] = '3'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 64: board[count + 1] = '4'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 65: board[count + 1] = '5'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 66: board[count + 1] = '6'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 67: board[count + 1] = '7'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 68: board[count + 1] = '8'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 69: board[count + 1] = '9'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 70: board[count + 1] = '0'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 71: board[count + 1] = '1'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 72: board[count + 1] = '2'; board[count] = '7'; count += 2; len[k] = 2; break;
+				}
+			}
+
+			for (k; k < 13; k++) {
+				switch (initialBoard[k]) {
+				case 1: board[count + 1] = '0'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 2: board[count + 1] = '0'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 3: board[count + 1] = '0'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 4: board[count + 1] = '0'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 5: board[count + 1] = '0'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 6: board[count + 1] = '0'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 7: board[count + 1] = '0'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 8: board[count + 1] = '0'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 9: board[count + 1] = '0'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 0: board[count + 1] = '0'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 10: board[count + 1] = '1'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 11: board[count + 1] = '1'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 12: board[count + 1] = '1'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 13: board[count + 1] = '1'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 14: board[count + 1] = '1'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 15: board[count + 1] = '1'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 16: board[count + 1] = '1'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 17: board[count + 1] = '1'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 18: board[count + 1] = '1'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 19: board[count + 1] = '1'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 20: board[count + 1] = '2'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 21: board[count + 1] = '2'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 22: board[count + 1] = '2'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 23: board[count + 1] = '2'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 24: board[count + 1] = '2'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 25: board[count + 1] = '2'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 26: board[count + 1] = '2'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 27: board[count + 1] = '2'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 28: board[count + 1] = '2'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 29: board[count + 1] = '2'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 30: board[count + 1] = '3'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 31: board[count + 1] = '3'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 32: board[count + 1] = '3'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 33: board[count + 1] = '3'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 34: board[count + 1] = '3'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 35: board[count + 1] = '3'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 36: board[count + 1] = '3'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 37: board[count + 1] = '3'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 38: board[count + 1] = '3'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 39: board[count + 1] = '3'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 40: board[count + 1] = '4'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 41: board[count + 1] = '4'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 42: board[count + 1] = '4'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 43: board[count + 1] = '4'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 44: board[count + 1] = '4'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 45: board[count + 1] = '4'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 46: board[count + 1] = '4'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 47: board[count + 1] = '4'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 48: board[count + 1] = '4'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 49: board[count + 1] = '4'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 50: board[count + 1] = '5'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 51: board[count + 1] = '5'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 52: board[count + 1] = '5'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 53: board[count + 1] = '5'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 54: board[count + 1] = '5'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 55: board[count + 1] = '5'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 56: board[count + 1] = '5'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 57: board[count + 1] = '5'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 58: board[count + 1] = '5'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 59: board[count + 1] = '5'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 60: board[count + 1] = '6'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 61: board[count + 1] = '6'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 62: board[count + 1] = '6'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 63: board[count + 1] = '6'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 64: board[count + 1] = '6'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 65: board[count + 1] = '6'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 66: board[count + 1] = '6'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 67: board[count + 1] = '6'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 68: board[count + 1] = '6'; board[count] = '8'; count += 2; len[k] = 2; break;
+				case 69: board[count + 1] = '6'; board[count] = '9'; count += 2; len[k] = 2; break;
+				case 70: board[count + 1] = '7'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 71: board[count + 1] = '7'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 72: board[count + 1] = '7'; board[count] = '2'; count += 2; len[k] = 2; break;
+				}
+			}
+
+			for (k; k < 14; k++) {
+				switch (initialBoard[k]) {
+				case 1: board[count + 1] = '1'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 2: board[count + 1] = '2'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 3: board[count + 1] = '3'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 4: board[count + 1] = '4'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 5: board[count + 1] = '5'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 6: board[count + 1] = '6'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 7: board[count + 1] = '7'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 8: board[count + 1] = '8'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 9: board[count + 1] = '9'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 0: board[count + 1] = '0'; board[count] = '0'; count += 2; len[k] = 2; break;
+				case 10: board[count + 1] = '0'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 11: board[count + 1] = '1'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 12: board[count + 1] = '2'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 13: board[count + 1] = '3'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 14: board[count + 1] = '4'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 15: board[count + 1] = '5'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 16: board[count + 1] = '6'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 17: board[count + 1] = '7'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 18: board[count + 1] = '8'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 19: board[count + 1] = '9'; board[count] = '1'; count += 2; len[k] = 2; break;
+				case 20: board[count + 1] = '0'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 21: board[count + 1] = '1'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 22: board[count + 1] = '2'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 23: board[count + 1] = '3'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 24: board[count + 1] = '4'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 25: board[count + 1] = '5'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 26: board[count + 1] = '6'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 27: board[count + 1] = '7'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 28: board[count + 1] = '8'; board[count] = '2'; count += 2; len[k] = 2; break;
+				case 29: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 30: board[count + 1] = '0'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 31: board[count + 1] = '1'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 32: board[count + 1] = '2'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 33: board[count + 1] = '3'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 34: board[count + 1] = '4'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 35: board[count + 1] = '5'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 36: board[count + 1] = '6'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 37: board[count + 1] = '7'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 38: board[count + 1] = '8'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 39: board[count + 1] = '9'; board[count] = '3'; count += 2; len[k] = 2; break;
+				case 40: board[count + 1] = '0'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 41: board[count + 1] = '1'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 42: board[count + 1] = '2'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 43: board[count + 1] = '3'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 44: board[count + 1] = '4'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 45: board[count + 1] = '5'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 46: board[count + 1] = '6'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 47: board[count + 1] = '7'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 48: board[count + 1] = '8'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 49: board[count + 1] = '9'; board[count] = '4'; count += 2; len[k] = 2; break;
+				case 50: board[count + 1] = '0'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 51: board[count + 1] = '1'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 52: board[count + 1] = '2'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 53: board[count + 1] = '3'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 54: board[count + 1] = '4'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 55: board[count + 1] = '5'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 56: board[count + 1] = '6'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 57: board[count + 1] = '7'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 58: board[count + 1] = '8'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 59: board[count + 1] = '9'; board[count] = '5'; count += 2; len[k] = 2; break;
+				case 60: board[count + 1] = '0'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 61: board[count + 1] = '1'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 62: board[count + 1] = '2'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 63: board[count + 1] = '3'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 64: board[count + 1] = '4'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 65: board[count + 1] = '5'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 66: board[count + 1] = '6'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 67: board[count + 1] = '7'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 68: board[count + 1] = '8'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 69: board[count + 1] = '9'; board[count] = '6'; count += 2; len[k] = 2; break;
+				case 70: board[count + 1] = '0'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 71: board[count + 1] = '1'; board[count] = '7'; count += 2; len[k] = 2; break;
+				case 72: board[count + 1] = '2'; board[count] = '7'; count += 2; len[k] = 2; break;
+				}
+			}
+
+
+			board[count] = '\n';
+
+			k = 0;
+			int count1 = 0;
+			int count2 = 0;
+			char Nizh[50] = "";
+			count1 = 0;
+			for (k; k < 6; k++) {
+				if (len[k] == 1) {
+					Nizh[count1] = board[count2];
+					Nizh[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					Nizh[count1] = board[count2];
+					Nizh[count1 + 1] = board[count2 + 1];
+					Nizh[count1 + 2] = '\n';
+					Nizh[count1 + 2] = '\n';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			Nizh[count1] = '\n';
+			char RightKalah[50] = "";
+			count1 = 0;
+			for (k; k < 7; k++) {
+				if (len[k] == 1) {
+					RightKalah[count1] = board[count2];
+					RightKalah[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					RightKalah[count1] = board[count2];
+					RightKalah[count1 + 1] = board[count2 + 1];
+					RightKalah[count1 + 2] = ' ';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			RightKalah[count1] = '\n';
+			count1 = 0;
+			char Verh[50] = "";
+
+			for (k; k < 13; k++) {
+				if (len[k] == 1) {
+					Verh[count1] = board[count2];
+					Verh[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					Verh[count1] = board[count2];
+					Verh[count1 + 1] = board[count2 + 1];
+					Verh[count1 + 2] = '\n';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			Verh[count1] = '\n';
+			char LeftKalah[50] = "";
+			count1 = 0;
+			for (k; k < 14; k++) {
+				if (len[k] == 1) {
+					LeftKalah[count1] = board[count2];
+					LeftKalah[count1 + 1] = ' ';
+					count1 += 2;
+					count2 += 1;
+				}
+				else if (len[k] == 2) {
+					LeftKalah[count1] = board[count2];
+					LeftKalah[count1 + 1] = board[count2 + 1];
+					LeftKalah[count1 + 2] = ' ';
+					count1 += 3;
+					count2 += 2;
+				}
+			}
+			LeftKalah[count1] = '\n';
+
+			_strrev(Verh);
+
+			glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			glPushMatrix();
+
+			glScalef(0.015, -0.015, 1);
+			renderText(-30, -40.5, "6", 0.7, 0.48, 0.55);
+			renderText(-30, -30, "5", 0.7, 0.48, 0.55);
+			renderText(-30, -19, "4", 0.7, 0.48, 0.55);
+			renderText(-30, -8, "3", 0.7, 0.48, 0.55);
+			renderText(-30, 2, "2", 0.7, 0.48, 0.55);
+			renderText(-30, 13, "1", 0.7, 0.48, 0.55);
+
+			renderText(13, -40.5, "1", 0.7, 0.48, 0.55);
+			renderText(13, -30, "2", 0.7, 0.48, 0.55);
+			renderText(13, -19, "3", 0.7, 0.48, 0.55);
+			renderText(13, -8, "4", 0.7, 0.48, 0.55);
+			renderText(13, 2, "5", 0.7, 0.48, 0.55);
+			renderText(13, 13, "6", 0.7, 0.48, 0.55);
+			renderText(-11, -50, LeftKalah, 0.5, 0, 0);
+			renderText(-11, 22, RightKalah, 0, 0.5, 0);
+			glScalef(0.8, 0.9, 0.5);
+			renderText(-25, -69, Verh, 0.5, 0, 0);
+			renderText(0, -45, Nizh, 0, 0.5, 0);
+			if (currentPlayerResponse == 0) {
+				displayMenu();
+				glScalef(0.5, 0.5, 1);
+				renderText(-130, -145.8, "Player", 1, 1, 1);
+				renderText(-130, -130, "Computer", 1, 1, 1);
+				renderText(-130, -114.2, "Exit", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 1) {
+				displayMenu();
+				glScalef(0.5, 0.5, 1);
+				renderText(-132, -145.8, "6", 1, 1, 1);
+				renderText(-132, -130, "5", 1, 1, 1);
+				renderText(-132, -114.2, "4", 1, 1, 1);
+				renderText(-132, -98.4, "3", 1, 1, 1);
+				renderText(-132, -82.6, "2", 1, 1, 1);
+				renderText(-132, -66.8, "1", 1, 1, 1);
+				renderText(140, -145.8, "1", 1, 1, 1);
+				renderText(140, -130, "2", 1, 1, 1);
+				renderText(140, -114.2, "3", 1, 1, 1);
+				renderText(140, -98.4, "4", 1, 1, 1);
+				renderText(140, -82.6, "5", 1, 1, 1);
+				renderText(140, -66.8, "6", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 2) {
+				displayMenu();
+				glScalef(0.5, 0.5, 1);
+				renderText(-130, -145.8, "Hard", 1, 1, 1);
+				renderText(-130, -130, "Medium", 1, 1, 1);
+				renderText(-130, -114.2, "Easy", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 3) {
+				glScalef(0.5, 0.5, 1);
+				renderText(-130, -145.8, "Computer move", 1, 1, 1);
+				renderText(140, -145.8, "1", 1, 1, 1);
+				renderText(140, -130, "2", 1, 1, 1);
+				renderText(140, -114.2, "3", 1, 1, 1);
+				renderText(140, -98.4, "4", 1, 1, 1);
+				renderText(140, -82.6, "5", 1, 1, 1);
+				renderText(140, -66.8, "6", 1, 1, 1);
+			}
+			if (currentPlayerResponse == 1) {
+				displayGameButtons();
+				if (checkEmpty == 1) {
+					renderText(-40, 100, "Player B wins", 0, 0.5, 0);
+				}
+				if (checkEmpty == 2) {
+					renderText(-40, 100, "Player A wins", 0.5, 0, 0);
+				}
+				if (checkEmpty == 3) {
+					renderText(-40, 100, "Draw", 0, 1, 1);
+				}
+			}
+			if (currentPlayerResponse == 3) {
+				displaySecondaryMenu();
+				if (checkEmpty == 1) {
+					renderText(-40, 100, "Player Computer (B) wins", 0, 0.5, 0);
+				}
+				if (checkEmpty == 2) {
+					renderText(-40, 100, "Player A wins", 0.5, 0, 0);
+				}
+				if (checkEmpty == 3) {
+					renderText(-40, 100, "Draw", 0, 1, 1);
+				}
+			}
+
+			if (gameFlag == 1) {
+				renderText(-65, 100, "Make one more currentTurn", 0, 0.5, 0);
+				gameFlag = 0;
+			}
+
+			if (currentPlayerResponse == 3 && side == B) {
+				renderText(-65, 80, "Press Computer move", 0.5, 0.5, 0.5);
+			}
+			if (currentPlayerResponse == 3 && side == A) {
+				renderText(-47, 80, "Player move", 0.5, 0.5, 0.5);
+			}
+
+			glPopMatrix();
+			SwapBuffers(hDC);
+
+		}
+	}
+
+
+	disableOpenGL(hwnd, hDC, hRC);
+
+
+	DestroyWindow(hwnd);
+
+	return msg.wParam;
+}
+
+LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_CLOSE:
+		PostQuitMessage(0);
+		break;
+
+	case WM_LBUTTONDOWN:
+		if (currentPlayerResponse == 0 || currentPlayerResponse == 2) {
+			for (int i = 0; i < 4; i++)
+				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), buttons[i])) {
+					if ((strcmp(buttons[i].name, "quit") == 0) && (currentPlayerResponse == 0))
+						PostQuitMessage(0);
+					else if ((strcmp(buttons[i].name, "players") == 0) && (currentPlayerResponse == 0))
+						currentPlayerResponse = 1;
+					else if ((strcmp(buttons[i].name, "computer") == 0) && (currentPlayerResponse == 0)) {
+						currentPlayerResponse = 2;
+					}
+					else if ((strcmp(buttons[i].name, "quit") == 0) && (currentPlayerResponse == 2)) {
+						currentPlayerResponse = 3;
+						maxSearchDepth = EASY;
+					}
+					else if ((strcmp(buttons[i].name, "players") == 0) && (currentPlayerResponse == 2)) {
+						currentPlayerResponse = 3;
+						maxSearchDepth = MEDIUM;
+					}
+					else if ((strcmp(buttons[i].name, "computer") == 0) && (currentPlayerResponse == 2)) {
+						currentPlayerResponse = 3;
+						maxSearchDepth = HARD;
+					}
+				}
+		}
+
+
+		else if (currentPlayerResponse == 1) {
+			for (int i = 0; i < 12; i++)
+				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
+					if ((strcmp(gameButtons[i].name, "11") == 0) && (side == B) && (initialBoard[12] != 0)) {
+						int output = performTurn(initialBoard, 13);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "12") == 0) && (side == B) && (initialBoard[11] != 0)) {
+						int output = performTurn(initialBoard, 12);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "13") == 0) && (side == B) && (initialBoard[10] != 0)) {
+						int output = performTurn(initialBoard, 11);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "14") == 0) && (side == B) && (initialBoard[9] != 0)) {
+						int output = performTurn(initialBoard, 10);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "15") == 0) && (side == B) && (initialBoard[8] != 0)) {
+						int output = performTurn(initialBoard, 9);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "16") == 0) && (side == B) && (initialBoard[7] != 0)) {
+						int output = performTurn(initialBoard, 8);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "21") == 0) && (side == A) && (start == 1) && (initialBoard[0] != 0)) {
+						int output = performTurn(initialBoard, 1);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "22") == 0) && (side == A) && (initialBoard[1] != 0)) { //
+						int output = performTurn(initialBoard, 2);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "23") == 0) && (side == A) && (initialBoard[2] != 0)) {
+						int output = performTurn(initialBoard, 3);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "24") == 0) && (side == A) && (initialBoard[3] != 0)) {
+						int output = performTurn(initialBoard, 4);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "25") == 0) && (side == A) && (initialBoard[4] != 0)) {
+						int output = performTurn(initialBoard, 5);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "26") == 0) && (side == A) && (initialBoard[5] != 0)) {
+						int output = performTurn(initialBoard, 6);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+				}
+		}
+		else if (currentPlayerResponse == 3) {
+			for (int i = 0; i < 12; i++)
+				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
+					if ((strcmp(gameButtons[i].name, "21") == 0) && (side == A) && (start == 1) && (initialBoard[0] != 0)) {
+						int output = performTurn(initialBoard, 1);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "22") == 0) && (side == A) && (initialBoard[1] != 0)) { //
+						int output = performTurn(initialBoard, 2);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "23") == 0) && (side == A) && (initialBoard[2] != 0)) {
+						int output = performTurn(initialBoard, 3);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "24") == 0) && (side == A) && (initialBoard[3] != 0)) {
+						int output = performTurn(initialBoard, 4);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "25") == 0) && (side == A) && (initialBoard[4] != 0)) {
+						int output = performTurn(initialBoard, 5);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((strcmp(gameButtons[i].name, "26") == 0) && (side == A) && (initialBoard[5] != 0)) {
+						int output = performTurn(initialBoard, 6);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						if (start == 0) start = 1;
+					}
+					if ((side == B) && (strcmp(gameButtons[i].name, "11") == 0)) {
+						int computerTurn = determineBestTurn(initialBoard);
+						int output = performSingleTurn(initialBoard, computerTurn + 7);
+						checkEmpty = checkEmptySide(initialBoard);
+						if (output == 0) {
+							if (side == A) side = B;
+							else side = A;
+						}
+						else { gameFlag = 1; }
+					}
+				}
+		}
+
+
+		break;
+
+	case WM_MOUSEMOVE:
+		for (int i = 0; i < 14; i++)
+			buttons[i].hover = isPointInButton(LOWORD(lParam), HIWORD(lParam), buttons[i]);
+		break;
+
+	case WM_SIZE:
+		windowWidth = LOWORD(lParam);
+		windowHeight = HIWORD(lParam);
+		glViewport(0, 0, windowWidth, windowHeight);
+		glLoadIdentity();
+		float k = windowWidth / (float)windowHeight;
+		glOrtho(-k, k, -1, 1, -1, 1);
+		break;
+
+	case WM_DESTROY:
+		return 0;
+
+	case WM_KEYDOWN:
+	{
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+			break;
+		}
+	}
+	break;
+
+	default:
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	}
+
+	return 0;
+}
+
+void enableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
+{
+	PIXELFORMATDESCRIPTOR pfd;
+
+	int iFormat;
+
+	*hDC = GetDC(hwnd);
+
+	ZeroMemory(&pfd, sizeof(pfd));
+
+	pfd.nSize = sizeof(pfd);
+	pfd.nVersion = 1;
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW |
+		PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.cColorBits = 24;
+	pfd.cDepthBits = 16;
+	pfd.iLayerType = PFD_MAIN_PLANE;
+
+	iFormat = ChoosePixelFormat(*hDC, &pfd);
+
+	SetPixelFormat(*hDC, iFormat, &pfd);
+
+
+	*hRC = wglCreateContext(*hDC);
+
+	wglMakeCurrent(*hDC, *hRC);
+}
+
+void disableOpenGL(HWND hwnd, HDC hDC, HGLRC hRC)
+{
+	wglMakeCurrent(NULL, NULL);
+	wglDeleteContext(hRC);
+	ReleaseDC(hwnd, hDC);
+}
