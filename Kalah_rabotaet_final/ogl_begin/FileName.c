@@ -7,7 +7,7 @@
 #include <windows.h>
 #include <C:\Users\katle\OneDrive\Desktop\C Programs\CS_sem2\stb_easy_font.h>
 #define _CRT_SECURE_NO_WARNINGS
-
+//will this comment show up as change in github?
 int currentTurn = 1;
 
 
