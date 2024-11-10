@@ -1505,7 +1505,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					if ((side == B) && (strcmp(gameButtons[i].buttonName, "B1") == 0)) {
 						clock_t start = clock();
 						fprintf(file, "\nComputer turn: %d\n", ++numCompTurn);
-						fprintf(file, "\tStarting time: %.8lf\n", (((double)start)/CLOCKS_PER_SEC)*1000);
+						//fprintf(file, "\tStarting time: %.8lf\n", (((double)start)/CLOCKS_PER_SEC)*1000);
 						//comment
 						// If button "11" is clicked for side B (computer's turn), determine the best move and perform it
 						int computerTurn = determineBestTurn(initialkalahBoard);
@@ -1516,7 +1516,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 							side = (side == A) ? B : A;
 						}
 						clock_t end = clock();
-						fprintf(file, "\tEnding time: %.8lf\n", (((double)end)/CLOCKS_PER_SEC )*1000);
+						fprintf(file, "\tExecuting time: %.8lf\n", (((double)end - (double)start) / CLOCKS_PER_SEC) * 1000);
 
 					}
 				}
