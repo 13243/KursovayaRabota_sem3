@@ -11,6 +11,7 @@
 
 //will this comment show up as change in github?
 int currentTurn = 1;
+int numCompTurn = 0;
 
 //why is figuring out github so hard for me, why do commits
 //only save sometime, seemingly completely unpredictabely
