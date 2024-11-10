@@ -6,7 +6,7 @@
 #include < string.h >
 #include <windows.h>
 #include <time.h>
-#include <C:\Users\katle\OneDrive\Desktop\C Programs\CS_sem2\stb_easy_font.h>
+#include <C:\Users\katle\OneDrive\Desktop\CS\CS_sem2\Калахи\New Kalah\Kalah_rabotaet_final\stb_easy_font.h>
 #define _CRT_SECURE_NO_WARNINGS
 //will this comment show up as change in github?
 int currentTurn = 1;
@@ -309,7 +309,7 @@ int kalahBoardEvaluation(int* kalahBoard) {
 	// Optionally, you could just return the difference in Kalahs, if that is the only factor considered:
 	// return (kalahBoard[13] - kalahBoard[6]);
 }
-
+//will this comment save?
 
 int determineBestTurn(int* kalahBoard) {
 	// Set the current turn to 1 (this might be a global variable)
@@ -329,7 +329,7 @@ int determineBestTurn(int* kalahBoard) {
 		for (j = 0; j < 14; j++) {
 			simulatedkalahBoard[j] = kalahBoard[j];
 		}
-
+     
 		// Check if the selected move has kamni to play
 		if (simulatedkalahBoard[move] > 0) {
 			// Simulate the move and get the result (k)
@@ -1488,6 +1488,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 						}
 					}
 					if ((side == B) && (strcmp(gameButtons[i].buttonName, "B1") == 0)) {
+						time_t start = time(0);
 						// If button "11" is clicked for side B (computer's turn), determine the best move and perform it
 						int computerTurn = determineBestTurn(initialkalahBoard);
 						int output = checkSimulatedMove(initialkalahBoard, computerTurn + 7);
