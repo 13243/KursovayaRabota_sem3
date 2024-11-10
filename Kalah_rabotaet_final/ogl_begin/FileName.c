@@ -21,10 +21,13 @@ int numCompTurn = 0;
 #define setCursor(x,y) printf  ("\033[%d;%dH", (y), (x))
 
 
-enum difficultyLevel { EASY = 6, MEDIUM = 6, HARD = 6 };
+//enum difficultyLevel { EASY = 6, MEDIUM = 6, HARD = 6 };
+enum difficultyLevel {LEVEL=7};
 enum SIDE { A, B };
 
-enum difficultyLevel maxSearchDepth = EASY;
+//enum difficultyLevel maxSearchDepth = EASY;
+enum difficultyLevel maxSearchDepth = LEVEL;
+
 
 int initializeGame(void);    // select game parameters
 int performTurn(int*, int); // scatters kamni to cells
@@ -1410,17 +1413,23 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					else if ((strcmp(buttons[i].buttonName, "quit") == 0) && (currentPlayerResponse == 2)) {
 						// If the "quit" button is clicked during the computer setup phase, set the game difficulty to EASY
 						currentPlayerResponse = 3;
-						maxSearchDepth = EASY;
+						//maxSearchDepth = EASY;
+						maxSearchDepth = LEVEL;
+
 					}
 					else if ((strcmp(buttons[i].buttonName, "players") == 0) && (currentPlayerResponse == 2)) {
 						// If the "players" button is clicked during the computer setup phase, set the game difficulty to MEDIUM
 						currentPlayerResponse = 3;
-						maxSearchDepth = MEDIUM;
+						//maxSearchDepth = MEDIUM;
+						maxSearchDepth = LEVEL;
+
 					}
 					else if ((strcmp(buttons[i].buttonName, "computer") == 0) && (currentPlayerResponse == 2)) {
 						// If the "computer" button is clicked during the computer setup phase, set the game difficulty to HARD
 						currentPlayerResponse = 3;
-						maxSearchDepth = HARD;
+						//maxSearchDepth = HARD;
+						maxSearchDepth = LEVEL;
+
 					}
 				}
 			}
