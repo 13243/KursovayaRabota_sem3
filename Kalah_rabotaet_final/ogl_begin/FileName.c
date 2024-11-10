@@ -1490,7 +1490,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					}
 					if ((side == B) && (strcmp(gameButtons[i].buttonName, "B1") == 0)) {
 						time_t start = time(0);
-						FILE* file = fopen("resultFile.txt", "rw");
+						FILE* file = fopen("resultFile.txt", "w");
 						fprintf(file, "Starting time: %d\n", start);
 						// If button "11" is clicked for side B (computer's turn), determine the best move and perform it
 						int computerTurn = determineBestTurn(initialkalahBoard);
