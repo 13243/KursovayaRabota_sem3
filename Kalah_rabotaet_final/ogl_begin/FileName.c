@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <windows.h>
 #include <gl/gl.h>
 #include <stdio.h>
@@ -7,7 +8,7 @@
 #include <windows.h>
 #include <time.h>
 #include <C:\Users\katle\OneDrive\Desktop\CS\CS_sem2\Калахи\New Kalah\Kalah_rabotaet_final\stb_easy_font.h>
-#define _CRT_SECURE_NO_WARNINGS
+
 //will this comment show up as change in github?
 int currentTurn = 1;
 
