@@ -1516,7 +1516,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 							side = (side == A) ? B : A;
 						}
 						clock_t end = clock();
-						fprintf(file, "\tExecuting time: %.8lf\n", (((double)end - (double)start) / CLOCKS_PER_SEC) * 1000);
+						fprintf(file, "\tExecuting time: %lf ms\n", (((double)end - (double)start) / CLOCKS_PER_SEC) * 1000);
 
 					}
 				}
