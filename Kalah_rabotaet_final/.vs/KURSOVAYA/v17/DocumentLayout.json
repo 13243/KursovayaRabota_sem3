@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\katle\\OneDrive\\Desktop\\C Programs\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\",
+  "WorkspaceRootPath": "C:\\Users\\katle\\OneDrive\\Desktop\\CS\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2B64A663-9599-4B59-A9EF-3DD1F89CDA01}|ogl_begin\\ogl_begin.vcxproj|C:\\Users\\katle\\OneDrive\\Desktop\\C Programs\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\ogl_begin\\FileName.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{2B64A663-9599-4B59-A9EF-3DD1F89CDA01}|ogl_begin\\ogl_begin.vcxproj|C:\\Users\\katle\\OneDrive\\Desktop\\CS\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\ogl_begin\\FileName.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{2B64A663-9599-4B59-A9EF-3DD1F89CDA01}|ogl_begin\\ogl_begin.vcxproj|solutionrelative:ogl_begin\\FileName.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\katle\\OneDrive\\Desktop\\C Programs\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\stb_easy_font.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\katle\\OneDrive\\Desktop\\CS\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\stb_easy_font.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:stb_easy_font.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -18,17 +18,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "FileName.c",
-              "DocumentMoniker": "C:\\Users\\katle\\OneDrive\\Desktop\\C Programs\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\ogl_begin\\FileName.c",
+              "DocumentMoniker": "C:\\Users\\katle\\OneDrive\\Desktop\\CS\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\ogl_begin\\FileName.c",
               "RelativeDocumentMoniker": "ogl_begin\\FileName.c",
-              "ToolTip": "C:\\Users\\katle\\OneDrive\\Desktop\\C Programs\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\ogl_begin\\FileName.c",
+              "ToolTip": "C:\\Users\\katle\\OneDrive\\Desktop\\CS\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\ogl_begin\\FileName.c",
               "RelativeToolTip": "ogl_begin\\FileName.c",
-              "ViewState": "AQIAAB0EAAAAAAAAAAArwHQEAAAAAAAA",
+              "ViewState": "AgIAAGwBAAAAAAAAAAArwHUBAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-06-07T09:45:43.846Z",
               "EditorCaption": ""
@@ -37,14 +41,13 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "stb_easy_font.h",
-              "DocumentMoniker": "C:\\Users\\katle\\OneDrive\\Desktop\\C Programs\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\stb_easy_font.h",
+              "DocumentMoniker": "C:\\Users\\katle\\OneDrive\\Desktop\\CS\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\stb_easy_font.h",
               "RelativeDocumentMoniker": "stb_easy_font.h",
-              "ToolTip": "C:\\Users\\katle\\OneDrive\\Desktop\\C Programs\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\stb_easy_font.h",
+              "ToolTip": "C:\\Users\\katle\\OneDrive\\Desktop\\CS\\CS_sem2\\\u041A\u0430\u043B\u0430\u0445\u0438\\New Kalah\\Kalah_rabotaet_final\\stb_easy_font.h",
               "RelativeToolTip": "stb_easy_font.h",
               "ViewState": "AQIAAEkAAAAAAAAAAAAAAFQAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-09-01T17:58:24.696Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-01T17:58:24.696Z"
             }
           ]
         }
