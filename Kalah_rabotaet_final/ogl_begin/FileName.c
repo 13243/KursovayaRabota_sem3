@@ -21,7 +21,7 @@ int numCompTurn = 0;
 #define setCursor(x,y) printf  ("\033[%d;%dH", (y), (x))
 
 
-enum difficultyLevel { EASY = 4, MEDIUM = 8, HARD = 12 };
+enum difficultyLevel { EASY = 6, MEDIUM = 6, HARD = 6 };
 enum SIDE { A, B };
 
 enum difficultyLevel maxSearchDepth = EASY;
