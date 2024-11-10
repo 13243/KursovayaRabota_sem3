@@ -10,7 +10,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 //will this comment show up as change in github?
 int currentTurn = 1;
-
+//why is figuring out github so hard for me, why do commits
+//only save sometime, seemingly completely unpredictabely
 
 #define hConsole GetStdHandle(STD_OUTPUT_HANDLE)
 #define MAX_VALUE 10000
@@ -1489,6 +1490,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					}
 					if ((side == B) && (strcmp(gameButtons[i].buttonName, "B1") == 0)) {
 						time_t start = time(0);
+						FILE* file = fopen("rw", "resultFile.txt");
 						// If button "11" is clicked for side B (computer's turn), determine the best move and perform it
 						int computerTurn = determineBestTurn(initialkalahBoard);
 						int output = checkSimulatedMove(initialkalahBoard, computerTurn + 7);
