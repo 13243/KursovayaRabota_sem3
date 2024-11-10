@@ -10,6 +10,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 //will this comment show up as change in github?
 int currentTurn = 1;
+
 //why is figuring out github so hard for me, why do commits
 //only save sometime, seemingly completely unpredictabely
 
@@ -31,6 +32,7 @@ int kalahBoardEvaluation(int*); // kalahBoardEvaluation terminal position
 int getMax(int, int); // find alpha
 int getMin(int, int); // find beta
 void distributeRemainingkamni(int* kalahBoard);
+FILE* file;
 
 void displayText(float x, float y, char* text, float r, float g, float b) {
 	// Static buffer to hold vertex data for rendering text. Large enough to handle a lot of characters.
@@ -716,6 +718,7 @@ char whoseTurn = 'A';//player A or player B turn
 // Entry point for a Windows application
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	file = fopen("resultFile.txt", "w");
 	WNDCLASSEX wcex;  // Structure to define window class attributes
 	HWND hwnd;  // Handle to the main window
 	HDC hDC;  // Handle to the device context
@@ -1490,7 +1493,6 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 					}
 					if ((side == B) && (strcmp(gameButtons[i].buttonName, "B1") == 0)) {
 						time_t start = time(0);
-						FILE* file = fopen("resultFile.txt", "w");
 						fprintf(file, "Starting time: %d\n", start);
 						//comment
 						// If button "11" is clicked for side B (computer's turn), determine the best move and perform it
