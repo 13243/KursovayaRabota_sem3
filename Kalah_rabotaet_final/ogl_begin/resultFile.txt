@@ -1,36 +1,33 @@
 
 Computer turn: 1
-	Executing time: 20 
+	Executing time: 4 
 
 Computer turn: 2
-	Executing time: 25 
+	Executing time: 3 
 
 Computer turn: 3
-	Executing time: 147 
+	Executing time: 10 
 
 Computer turn: 4
-	Executing time: 1799 
+	Executing time: 21 
 
 Computer turn: 5
-	Executing time: 1028 
+	Executing time: 14 
 
 Computer turn: 6
-	Executing time: 1444 
+	Executing time: 9 
 
 Computer turn: 7
-	Executing time: 5008 
+	Executing time: 19 
 
 Computer turn: 8
-	Executing time: 4715 
+	Executing time: 15 
 
 Computer turn: 9
-	Executing time: 3313 
+	Executing time: 19 
 
 Computer turn: 10
-	Executing time: 2370 
+	Executing time: 8 
 
 Computer turn: 11
-	Executing time: 1575 
-
-Computer turn: 12
-	Executing time: 1174 
+	Executing time: 6 
