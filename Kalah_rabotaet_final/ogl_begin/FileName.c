@@ -35,8 +35,6 @@ int performTurn(int*, int); // scatters kamni to cells
 int determineBestTurn(int*); // initial function to start calculating best currentTurn
 int miniMaxAB(int*, int, enum SIDE, int, int); // main algorythm to calculate the best currentTurn for computer
 int kalahBoardEvaluation(int*); // kalahBoardEvaluation terminal position
-int getMax(int, int); // find alpha
-int getMin(int, int); // find beta
 void distributeRemainingkamni(int* kalahBoard);
 FILE* file;
 
