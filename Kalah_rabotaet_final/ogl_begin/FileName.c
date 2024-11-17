@@ -417,7 +417,8 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 				// Update the best score found and perform alpha-beta pruning
 				if (score > best) {
 					best = score;
-					alpha = getMax(alpha, best); // Update alpha to the maximum value found
+					alpha = (alpha > best) ? alpha : best; // Update alpha to the maximum value found
+					
 					if (beta<alpha) return alpha;
 					else
 						continue;
@@ -451,7 +452,7 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 				// Update the best score found and perform alpha-beta pruning
 				if (score < best) {
 					best = score;
-					beta = getMin(beta, best); // Update beta to the minimum value found
+					beta = (beta < best) ? beta : best; // Update beta to the minimum value found
 					if (alpha>beta) return beta;
 					else
 						continue;
@@ -460,17 +461,6 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 		}
 	}
 	return best; // Return the best score found for the current kalahBoard state
-}
-
-
-int getMax(int alpha, int best) {
-	currentTurn == 1;
-	return alpha > best ? alpha : best;
-}
-
-int getMin(int beta, int best) {
-	currentTurn == 1;
-	return beta < best ? beta : best;
 }
 
 char displayError(int type) {
