@@ -22,7 +22,7 @@ int numCompTurn = 0;
 
  
 //enum difficultyLevel { EASY = 6, MEDIUM = 6, HARD = 6 };
-enum difficultyLevel {LEVEL=3};
+enum difficultyLevel {LEVEL=8};
 enum SIDE { A, B };
 
 //enum difficultyLevel maxSearchDepth = EASY;
@@ -418,6 +418,9 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 				if (score > best) {
 					best = score;
 					alpha = getMax(alpha, best); // Update alpha to the maximum value found
+					if (beta<=alpha) return alpha;
+					else
+						continue;
 				}
 			}
 		}
