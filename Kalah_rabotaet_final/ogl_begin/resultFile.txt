@@ -1,45 +1,51 @@
 
 Computer turn: 1
-	Executing time: 1 
+	Executing time: 0 
 
 Computer turn: 2
-	Executing time: 1 
+	Executing time: 0 
 
 Computer turn: 3
-	Executing time: 4 
+	Executing time: 0 
 
 Computer turn: 4
-	Executing time: 2 
+	Executing time: 1 
 
 Computer turn: 5
-	Executing time: 6 
+	Executing time: 0 
 
 Computer turn: 6
-	Executing time: 4 
+	Executing time: 0 
 
 Computer turn: 7
-	Executing time: 5 
+	Executing time: 1 
 
 Computer turn: 8
 	Executing time: 1 
 
 Computer turn: 9
-	Executing time: 3 
+	Executing time: 0 
 
 Computer turn: 10
-	Executing time: 5 
+	Executing time: 0 
 
 Computer turn: 11
-	Executing time: 4 
+	Executing time: 0 
 
 Computer turn: 12
-	Executing time: 2 
+	Executing time: 1 
 
 Computer turn: 13
 	Executing time: 1 
 
 Computer turn: 14
-	Executing time: 1 
+	Executing time: 0 
 
 Computer turn: 15
+	Executing time: 0 
+
+Computer turn: 16
+	Executing time: 0 
+
+Computer turn: 17
 	Executing time: 0 
