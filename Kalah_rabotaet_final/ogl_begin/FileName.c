@@ -9,6 +9,7 @@
 #include <time.h>
 #include <C:\Users\katle\OneDrive\Desktop\CS\CS_sem2\Калахи\New Kalah\Kalah_rabotaet_final\stb_easy_font.h>
 
+#pragma comment(lib, "opengl32.lib") // Link the OpenGL library
 //will this comment show up as change in github?
 int currentTurn = 1;
 int numCompTurn = 0;
@@ -463,34 +464,6 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 	return best; // Return the best score found for the current kalahBoard state
 }
 
-char displayError(int type) {
-	char msg[100];
-	switch (type) {
-	case 2: {
-		*msg = "displayError: Cell is empty. Press Enter to continue.";
-		break;
-	}
-	case 3: {
-		*msg = "displayError: Invalid command. Press Enter to continue.";
-		break;
-	}
-	case 4: {
-		*msg = "displayError: Invalid difficultyLevel. Press Enter to continue.";
-		break;
-	}
-	case 5: {
-		*msg = "displayError: Invalid command. Press Enter to continue.";
-		break;
-	}
-	case 6: {
-		*msg = "displayError: Invalid first move. Press Enter to continue.";
-		break;
-	}
-	}
-	return *msg;
-}
-
-#pragma comment(lib, "opengl32.lib") // Link the OpenGL library
 
 // Function prototypes for window procedures and OpenGL setup
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
