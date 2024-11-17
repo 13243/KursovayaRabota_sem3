@@ -22,7 +22,7 @@ int numCompTurn = 0;
 
  
 //enum difficultyLevel { EASY = 6, MEDIUM = 6, HARD = 6 };
-enum difficultyLevel {LEVEL=7};
+enum difficultyLevel {LEVEL=6};
 enum SIDE { A, B };
 
 //enum difficultyLevel maxSearchDepth = EASY;
