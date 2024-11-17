@@ -14,6 +14,8 @@
 int currentTurn=1;
 int numCompTurn=0;
 
+int initialkalahBoard[14]={ 6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 0 };
+
 
 #define hConsole GetStdHandle(STD_OUTPUT_HANDLE)
 #define MAX_VALUE 10000
@@ -223,9 +225,6 @@ int performTurn(int* kalahBoard, int move) {
 	// Return whether the turn should be repeated (1 for yes, 0 for no)
 	return repeatTurn;
 }
-
-
-int initialkalahBoard[14]={ 6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 0 };
 
 int checkEmptySide(int* initialkalahBoard) {
 	int i;
