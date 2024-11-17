@@ -418,7 +418,7 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 				if (score > best) {
 					best = score;
 					alpha = getMax(alpha, best); // Update alpha to the maximum value found
-					if (beta<=alpha) return alpha;
+					if (beta<alpha) return alpha;
 					else
 						continue;
 				}
@@ -452,6 +452,9 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 				if (score < best) {
 					best = score;
 					beta = getMin(beta, best); // Update beta to the minimum value found
+					if (alpha>beta) return beta;
+					else
+						continue;
 				}
 			}
 		}
