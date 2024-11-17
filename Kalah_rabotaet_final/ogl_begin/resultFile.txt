@@ -1,0 +1,36 @@
+
+Computer turn: 1
+	Executing time: 20 
+
+Computer turn: 2
+	Executing time: 25 
+
+Computer turn: 3
+	Executing time: 147 
+
+Computer turn: 4
+	Executing time: 1799 
+
+Computer turn: 5
+	Executing time: 1028 
+
+Computer turn: 6
+	Executing time: 1444 
+
+Computer turn: 7
+	Executing time: 5008 
+
+Computer turn: 8
+	Executing time: 4715 
+
+Computer turn: 9
+	Executing time: 3313 
+
+Computer turn: 10
+	Executing time: 2370 
+
+Computer turn: 11
+	Executing time: 1575 
+
+Computer turn: 12
+	Executing time: 1174 
