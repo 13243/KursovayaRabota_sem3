@@ -89,17 +89,17 @@ int checkSimulatedMove(int* kalahBoard, int move) {
 		kalahBoard[i]++;  // Place one stone in the next pit
 
 		// Special handling for the end of the kalahBoard (Kalah) - skip opponent's Kalah
-		if ((move > 6 && i == 6) || (move < 6 && i == 13)) {
+		if ((move > 6 && i==6) || (move < 6 && i==13)) {
 			kalahBoard[i]--;  // Remove the stone from the opponent's Kalah
 			kamni++;  // Decrement kamni to place the stone in the next pit
 		}
 
 		// If the distribution wraps around the kalahBoard
-		if (i == 13 && kamni > 0) i=-1;  // Reset index to start from the first pit
+		if (i==13 && kamni > 0) i=-1;  // Reset index to start from the first pit
 	}
 
 	// Check Kalah rule - if the last stone lands in the opposite player's  Kalah
-	if ((kalahBoard[i] == 1 && kalahBoard[12 - i]) &&
+	if ((kalahBoard[i]==1 && kalahBoard[12 - i]) &&
 		((move < 6 && i < 6) || (move > 6 && i > 6 && i < 13))) {
 
 		// If the last stone lands in the opposite player's Kalah and the opposite pit has kamni
@@ -120,7 +120,7 @@ int checkSimulatedMove(int* kalahBoard, int move) {
 	}
 
 	// Check Kalah rule - if the last stone lands in the player's own Kalah, they get an extra turn
-	if ((move < 6 && i == 6) || (move > 6 && i == 13))
+	if ((move < 6 && i==6) || (move > 6 && i==13))
 		repeatTurn=1;  // Set repeatTurn to 1 to indicate an extra turn
 
 	return repeatTurn;  // Return whether an extra turn is granted
@@ -185,18 +185,18 @@ int performTurn(int* kalahBoard, int move) {
 		kalahBoard[i]++;  // Place one stone in the current pit
 
 		// Handle the case where we wrap around the kalahBoard
-		if ((move > 6 && i == 6) || (move < 6 && i == 13)) {
+		if ((move > 6 && i==6) || (move < 6 && i==13)) {
 			// If we land in the opponent's Kalah, go back one pit and add the stone back to distribute again
 			kalahBoard[i]--;
 			kamni++;
 		}
 
 		// Handle the wrap-around case (if we reach the end of the kalahBoard, start again from the beginning)
-		if (i == 13 && kamni > 0) i=-1;
+		if (i==13 && kamni > 0) i=-1;
 	}
 
 	// Check if the last stone landed in the player's own Kalah or empty pit
-	if ((kalahBoard[i] == 1 && kalahBoard[12 - i]) &&
+	if ((kalahBoard[i]==1 && kalahBoard[12 - i]) &&
 		// Check if the last stone is in the player's own Kalah and the opposite pit is not empty
 		((move < 6 && i < 6) || (move > 6 && i > 6 && i < 13))) {
 
@@ -217,7 +217,7 @@ int performTurn(int* kalahBoard, int move) {
 	}
 
 	// Check if the turn should be repeated
-	if ((move < 6 && i == 6) || (move > 6 && i == 13)) {
+	if ((move < 6 && i==6) || (move > 6 && i==13)) {
 		// If the last stone ended up in the player’s own Kalah, the player gets another turn
 		repeatTurn=1;
 	}
@@ -347,7 +347,7 @@ int determineBestTurn(int* kalahBoard) {
 			}
 			else {
 				// Use alpha-beta pruning to evaluate the move
-				if (repeatIndicator == 1) {
+				if (repeatIndicator==1) {
 					// If a repeat turn is allowed, search deeper
 					score=miniMaxAB(simulatedkalahBoard, maxSearchDepth, B, -MAX_VALUE, MAX_VALUE);
 				}
@@ -380,14 +380,17 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 	int best;
 
 	// Base case: if the current depth is zero, evaluate the kalahBoard and return the score
-	if (curDepth == 0) return kalahBoardEvaluation(kalahBoard);
+	if (curDepth==0) return kalahBoardEvaluation(kalahBoard);
 
 	// Initialize the best score based on the side (Player A or Player B)
-	if (side == B) {
+	if (side==B) {
 		best=-MAX_VALUE; // Initialize best score for maximizing player B
 
 		for (move=12; move > 6; move--) { // Iterate over Player B's moves (pits 7 to 12)
 			for (i=0; i < 14; i++) simulatedkalahBoard[i]=kalahBoard[i]; // Copy the current kalahBoard state
+
+			memcpy_s(simulatedkalahBoard, sizeof(simulatedkalahBoard),kalahBoard, sizeof(kalahBoard));
+
 
 			// Check if the move is valid
 			if (simulatedkalahBoard[move] > 0) {
@@ -402,10 +405,10 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 					// Recursively call alpha-beta pruning on the new kalahBoard state
 					if (repeatIndicator )
 						score=miniMaxAB(simulatedkalahBoard, curDepth, side, alpha, beta);
-					else if (side == B) {
+					else if (side==B) {
 						score=miniMaxAB(simulatedkalahBoard, curDepth - 1, A, alpha, beta);
 					}
-					else if (side == A) {
+					else if (side==A) {
 						score=miniMaxAB(simulatedkalahBoard, curDepth - 1, B, alpha, beta);
 					}
 				}
@@ -422,7 +425,7 @@ int miniMaxAB(int* kalahBoard, int curDepth, enum SIDE side, int alpha, int beta
 			}
 		}
 	}
-	else if (side == A) {
+	else if (side==A) {
 		currentTurn=1;
 		best=MAX_VALUE; // Initialize best score for minimizing player A
 		for (move=5; move >= 0; move--) { // Iterate over Player A's moves (pits 0 to 5)
@@ -765,7 +768,7 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // Check for messages
 		{
-			if (msg.message == WM_QUIT)  // If the message is WM_QUIT, exit the loop
+			if (msg.message==WM_QUIT)  // If the message is WM_QUIT, exit the loop
 			{
 				bQuit=TRUE;
 			}
@@ -916,14 +919,14 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 
 
 
-			if (currentPlayerResponse == 0) {
+			if (currentPlayerResponse==0) {
 				displayMenu();
 				glScalef(0.5, 0.5, 1);
 				displayText(-130, -145.8, "Player", 1, 1, 1);
 				displayText(-130, -130, "Computer", 1, 1, 1);
 				displayText(-130, -114.2, "Exit", 1, 1, 1);
 			}
-			if (currentPlayerResponse == 1) {
+			if (currentPlayerResponse==1) {
 				displayMenu();
 				glScalef(0.5, 0.5, 1);
 				displayText(-132, -145.8, "6", 1, 1, 1);
@@ -940,14 +943,14 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 				displayText(140, -66.8, "6", 1, 1, 1);
 				
 			}
-			if (currentPlayerResponse == 2) {
+			if (currentPlayerResponse==2) {
 				displayMenu();
 				glScalef(0.5, 0.5, 1);
 				displayText(-130, -145.8, "Hard", 1, 1, 1);
 				displayText(-130, -130, "Medium", 1, 1, 1);
 				displayText(-130, -114.2, "Easy", 1, 1, 1);
 			}
-			if (currentPlayerResponse == 3) {
+			if (currentPlayerResponse==3) {
 
 				glScalef(0.5, 0.5, 1);
 				displayText(-130, -145.8, "Computer move", 1, 1, 1);
@@ -959,45 +962,45 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 				displayText(140, -66.8, "6", 1, 1, 1);
 				
 			}
-			if (currentPlayerResponse == 1) {
+			if (currentPlayerResponse==1) {
 				displayGameButtons();
-				if (checkEmpty == 1) {
+				if (checkEmpty==1) {
 					displayText(-40, 100, "Player A wins", 0, 0.5, 0);
 				}
-				if (checkEmpty == 2) {
+				if (checkEmpty==2) {
 					displayText(-40, 100, "Player B wins", 0.5, 0, 0);
 				}
-				if (checkEmpty == 3) {
+				if (checkEmpty==3) {
 					displayText(-40, 100, "Draw", 0, 1, 1);
 				}
 			}
-			if (currentPlayerResponse == 3) {
+			if (currentPlayerResponse==3) {
 				displaySecondaryMenu();
 
-				if (checkEmpty == 1) {
+				if (checkEmpty==1) {
 					displayText(-40, 100, "Player A wins", 0, 0.5, 0);
 				}
-				if (checkEmpty == 2) {
+				if (checkEmpty==2) {
 					displayText(-40, 100, "Player B wins", 0.5, 0, 0);
 				}
-				if (checkEmpty == 3) {
+				if (checkEmpty==3) {
 					displayText(-40, 100, "Draw", 0, 1, 1);
 				}
 			}
 
 			
 
-			if (currentPlayerResponse == 3 && side == B) {
+			if (currentPlayerResponse==3 && side==B) {
 				displayText(-65, 80, "Computer's turn", 0.5, 0.5, 0.5);
 			}
-			if (currentPlayerResponse == 3 && side == A) {
+			if (currentPlayerResponse==3 && side==A) {
 				displayText(-47, 80, "Player's move", 0.5, 0.5, 0.5);
 			}
 
-			if (currentPlayerResponse == 1 && side == B) {
+			if (currentPlayerResponse==1 && side==B) {
 				displayText(-65, 80, "Player B's turn", 0.5, 0.5, 0.5);
 			}
-			if (currentPlayerResponse == 1 && side == A) {
+			if (currentPlayerResponse==1 && side==A) {
 				displayText(-47, 80, "Player A's move", 0.5, 0.5, 0.5);
 			}
 
@@ -1021,81 +1024,81 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 
 	case WM_LBUTTONDOWN://clicked
-		if (currentPlayerResponse == 1) {
+		if (currentPlayerResponse==1) {
 			// If the game is in player vs player mode
 			for (int i=0; i < 12; i++) {
 				// Iterate through the set of game buttons
 				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
 					// Check if the mouse click is within one of the game buttons
 
-					if (((strcmp(gameButtons[i].buttonName, "B1") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "B2") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "B3") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "B4") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "B5") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "B6") == 0)) &&
-						(side == B) &&
+					if (((strcmp(gameButtons[i].buttonName, "B1")==0) ||
+						(strcmp(gameButtons[i].buttonName, "B2")==0) ||
+						(strcmp(gameButtons[i].buttonName, "B3")==0) ||
+						(strcmp(gameButtons[i].buttonName, "B4")==0) ||
+						(strcmp(gameButtons[i].buttonName, "B5")==0) ||
+						(strcmp(gameButtons[i].buttonName, "B6")==0)) &&
+						(side==B) &&
 						(initialkalahBoard[13 - atoi(&gameButtons[i].buttonName[1])] != 0)) {
 						int boardIndex = 14 - atoi(&gameButtons[i].buttonName[1]);  // Corrected mapping
 						int output = performTurn(initialkalahBoard, boardIndex);
 						checkEmpty = checkEmptySide(initialkalahBoard);
-						if (output == 0) {
+						if (output==0) {
 							// Switch sides if turn is valid
-							side = (side == A) ? B : A;
+							side = (side==A) ? B : A;
 						}
 					}
 
-					if (((strcmp(gameButtons[i].buttonName, "A1") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A2") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A3") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A4") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A5") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A6") == 0)) &&
-						(side == A) &&
+					if (((strcmp(gameButtons[i].buttonName, "A1")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A2")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A3")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A4")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A5")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A6")==0)) &&
+						(side==A) &&
 						(initialkalahBoard[atoi(&gameButtons[i].buttonName[1]) - 1] != 0)) {
 						int output = performTurn(initialkalahBoard, atoi(&gameButtons[i].buttonName[1]));
 						checkEmpty = checkEmptySide(initialkalahBoard);
-						if (output == 0) {
+						if (output==0) {
 							// Switch sides if turn is valid
-							side = (side == A) ? B : A;
+							side = (side==A) ? B : A;
 						}
 					}
 				}
 			}
 		}
-		else if (currentPlayerResponse == 0 || currentPlayerResponse == 2) {
+		else if (currentPlayerResponse==0 || currentPlayerResponse==2) {
 			// If the game is in the initial state or computer setup phase
 			for (int i=0; i < 4; i++) {
 				// Iterate through the first set of buttons
 				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), buttons[i])) {
 					// Check if the mouse click is within one of the buttons
-					if ((strcmp(buttons[i].buttonName, "quit") == 0) && (currentPlayerResponse == 0)) {
+					if (!currentPlayerResponse&&strcmp(buttons[i].buttonName, "quit")==0) {
 						// If the "quit" button is clicked and it's the initial state, exit the application
 						PostQuitMessage(0);
 					}
-					else if ((strcmp(buttons[i].buttonName, "players") == 0) && (currentPlayerResponse == 0)) {
+					else if (!currentPlayerResponse&&strcmp(buttons[i].buttonName, "players")==0) {
 						// If the "players" button is clicked and it's the initial state, switch to player vs player mode
 						currentPlayerResponse=1;
 					}
-					else if ((strcmp(buttons[i].buttonName, "computer") == 0) && (currentPlayerResponse == 0)) {
+					else if (!currentPlayerResponse&&strcmp(buttons[i].buttonName, "computer")==0) {
 						// If the "computer" button is clicked and it's the initial state, switch to player vs computer mode
 						currentPlayerResponse=2;
 					}
-					else if ((strcmp(buttons[i].buttonName, "quit") == 0) && (currentPlayerResponse == 2)) {
+					else if (currentPlayerResponse==2&&strcmp(buttons[i].buttonName, "quit"==0)) {
 						// If the "quit" button is clicked during the computer setup phase, set the game difficulty to EASY
 						currentPlayerResponse=3;
 						//maxSearchDepth=EASY;
 						maxSearchDepth=LEVEL;
 
 					}
-					else if ((strcmp(buttons[i].buttonName, "players") == 0) && (currentPlayerResponse == 2)) {
+					else if (currentPlayerResponse==2&&strcmp(buttons[i].buttonName, "players"== 0)) {
 						// If the "players" button is clicked during the computer setup phase, set the game difficulty to MEDIUM
 						currentPlayerResponse=3;
 						//maxSearchDepth=MEDIUM;
 						maxSearchDepth=LEVEL;
 
 					}
-					else if ((strcmp(buttons[i].buttonName, "computer") == 0) && (currentPlayerResponse == 2)) {
+					else if (currentPlayerResponse==2&&(strcmp(buttons[i].buttonName, "computer")==0)) {
 						// If the "computer" button is clicked during the computer setup phase, set the game difficulty to HARD
 						currentPlayerResponse=3;
 						//maxSearchDepth=HARD;
@@ -1106,29 +1109,29 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			}
 		}
 
-		else if (currentPlayerResponse == 3) {
+		else if (currentPlayerResponse==3) {
 			// If the game is in the computer's move phase
 			
 			for (int i=0; i < 12; i++) {
 				// Iterate through the set of game buttons
 				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
 					// Check if the mouse click is within one of the game buttons
-					if (((strcmp(gameButtons[i].buttonName, "A1") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A2") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A3") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A4") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A5") == 0) ||
-						(strcmp(gameButtons[i].buttonName, "A6") == 0)) &&
-						(side == A) &&
+					if (((strcmp(gameButtons[i].buttonName, "A1")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A2")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A3")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A4")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A5")==0) ||
+						(strcmp(gameButtons[i].buttonName, "A6")==0)) &&
+						(side==A) &&
 						(initialkalahBoard[atoi(&gameButtons[i].buttonName[1]) - 1] != 0)) {
 						int output = performTurn(initialkalahBoard, atoi(&gameButtons[i].buttonName[1]));
 						checkEmpty = checkEmptySide(initialkalahBoard);
-						if (output == 0) {
+						if (output==0) {
 							// Switch sides if turn is valid
-							side = (side == A) ? B : A;
+							side = (side==A) ? B : A;
 						}
 					}
-					if ((side == B) && (strcmp(gameButtons[i].buttonName, "B1") == 0)) {
+					if ((side==B) && (strcmp(gameButtons[i].buttonName, "B1")==0)) {
 						clock_t start=clock();
 						fprintf(file, "\nComputer turn: %d\n", ++numCompTurn);
 						//fprintf(file, "\tStarting time: %.8lf\n", (((double)start)/CLOCKS_PER_SEC)*1000);
@@ -1137,9 +1140,9 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 						int computerTurn=determineBestTurn(initialkalahBoard);
 						int output=checkSimulatedMove(initialkalahBoard, computerTurn + 7);
 						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
+						if (output==0) {
 							// Switch sides if computer's move is valid
-							side=(side == A) ? B : A;
+							side=(side==A) ? B : A;
 						}
 						clock_t end=clock();
 						fprintf(file, "\tExecuting time: %d \n", ((int)end - (int)start) );
