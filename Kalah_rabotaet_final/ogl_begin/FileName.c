@@ -792,7 +792,7 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 
 			// Process the first part of the kalahBoard (textForRightPits)
 			currentArrayPositionCounter=0;
-			for (boardCounter; boardCounter < 6; boardCounter++) {
+			while (boardCounter < 6) {
 				// If length is 1, add a single character followed by a space
 				
 					textForRightPits[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
@@ -800,6 +800,7 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 					textForRightPits[currentArrayPositionCounter + 2]='\n'; // Adding two newlines seems to be a mistake; it's corrected here to just one newline
 					currentArrayPositionCounter += 3;
 					currentkalahBoardPositionCounter += 2;
+					boardCounter++;
 				
 			}
 			textForRightPits[currentArrayPositionCounter]='\n'; // Ensure the final part ends with a newline
@@ -807,38 +808,40 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 			// Initialize and format the text for the right part of the kalahBoard (bottomKalah)
 			char bottomKalah[50]="";
 			currentArrayPositionCounter=0;
-			for (boardCounter; boardCounter < 7; boardCounter++) {
+			while (boardCounter < 7) {
 				// Similar processing as above but including spaces between two-character entries
 					bottomKalah[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
 					bottomKalah[currentArrayPositionCounter + 1]=kalahBoard[currentkalahBoardPositionCounter + 1];
 					bottomKalah[currentArrayPositionCounter + 2]=' ';
 					currentArrayPositionCounter += 3;
 					currentkalahBoardPositionCounter += 2;
+					boardCounter++;
 			}
 			bottomKalah[currentArrayPositionCounter]='\n'; // End with a newline
 
 			// Initialize and format the text for the top part of the kalahBoard (textForLeftPits)
 			currentArrayPositionCounter=0;
 			char textForLeftPits[50]="";
-			for (boardCounter; boardCounter < 13; boardCounter++) {
+			while (boardCounter< 13) {
 				textForLeftPits[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
 				textForLeftPits[currentArrayPositionCounter + 1]=kalahBoard[currentkalahBoardPositionCounter + 1];
 				textForLeftPits[currentArrayPositionCounter + 2]='\n'; // Properly add newline here
 				currentArrayPositionCounter += 3;
 				currentkalahBoardPositionCounter += 2;
+				boardCounter++;
 			}
 			textForLeftPits[currentArrayPositionCounter]='\n'; // Ensure the final part ends with a newline
 
 			// Initialize and format the text for the left part of the kalahBoard (topKalah)
 			char topKalah[50]="";
 			currentArrayPositionCounter=0;
-			for (boardCounter; boardCounter < 14; boardCounter++) {
-				
+			while (boardCounter<14){
 					topKalah[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
 					topKalah[currentArrayPositionCounter + 1]=kalahBoard[currentkalahBoardPositionCounter + 1];
 					topKalah[currentArrayPositionCounter + 2]=' ';
 					currentArrayPositionCounter += 3;
 					currentkalahBoardPositionCounter += 2;
+					boardCounter++;
 			}
 			topKalah[currentArrayPositionCounter]='\n'; // Ensure the final part ends with a newline
 
