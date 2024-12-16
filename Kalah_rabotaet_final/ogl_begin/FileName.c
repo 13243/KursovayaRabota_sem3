@@ -764,241 +764,899 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 			// Handle the game's logic and rendering here
 
 			char kalahBoard[100]="";  // Array to store the kalahBoard state as a string
-			int k=0;  // Index for looping
+			int boardCounter;  // Index for looping
 			int count=0;  // Counter for the kalahBoard string
 			int len[14]={ 0 };  // Array to store lengths of kalahBoard segments
-			for (k; k < 7; k++) {
-				switch (initialkalahBoard[k]){
-				case 1: kalahBoard[count + 1]='1'; kalahBoard[count]='0'; count +=2; break;
-				case 2: kalahBoard[count + 1]='2'; kalahBoard[count]='0'; count +=2; break;
-				case 3: kalahBoard[count + 1]='3'; kalahBoard[count]='0'; count +=2; break;
-				case 4: kalahBoard[count + 1]='4'; kalahBoard[count]='0'; count +=2; break;
-				case 5: kalahBoard[count + 1]='5'; kalahBoard[count]='0'; count +=2; break;
-				case 6: kalahBoard[count + 1]='6'; kalahBoard[count]='0'; count +=2; break;
-				case 7: kalahBoard[count + 1]='7'; kalahBoard[count]='0'; count +=2; break;
-				case 8: kalahBoard[count + 1]='8'; kalahBoard[count]='0'; count +=2; break;
-				case 9: kalahBoard[count + 1]='9'; kalahBoard[count]='0'; count +=2; break;
-				case 0: kalahBoard[count + 1]='0'; kalahBoard[count]='0'; count +=2; break;
-				case 10: kalahBoard[count + 1]='0'; kalahBoard[count]='1'; count +=2; break;
-				case 11: kalahBoard[count + 1]='1'; kalahBoard[count]='1'; count +=2; break;
-				case 12: kalahBoard[count + 1]='2'; kalahBoard[count]='1'; count +=2; break;
-				case 13: kalahBoard[count + 1]='3'; kalahBoard[count]='1'; count +=2; break;
-				case 14: kalahBoard[count + 1]='4'; kalahBoard[count]='1'; count +=2; break;
-				case 15: kalahBoard[count + 1]='5'; kalahBoard[count]='1'; count +=2; break;
-				case 16: kalahBoard[count + 1]='6'; kalahBoard[count]='1'; count +=2; break;
-				case 17: kalahBoard[count + 1]='7'; kalahBoard[count]='1'; count +=2; break;
-				case 18: kalahBoard[count + 1]='8'; kalahBoard[count]='1'; count +=2; break;
-				case 19: kalahBoard[count + 1]='9'; kalahBoard[count]='1'; count +=2; break;
-				case 20: kalahBoard[count + 1]='0'; kalahBoard[count]='2'; count +=2; break;
-				case 21: kalahBoard[count + 1]='1'; kalahBoard[count]='2'; count +=2; break;
-				case 22: kalahBoard[count + 1]='2'; kalahBoard[count]='2'; count +=2; break;
-				case 23: kalahBoard[count + 1]='3'; kalahBoard[count]='2'; count +=2; break;
-				case 24: kalahBoard[count + 1]='4'; kalahBoard[count]='2'; count +=2; break;
-				case 25: kalahBoard[count + 1]='5'; kalahBoard[count]='2'; count +=2; break;
-				case 26: kalahBoard[count + 1]='6'; kalahBoard[count]='2'; count +=2; break;
-				case 27: kalahBoard[count + 1]='7'; kalahBoard[count]='2'; count +=2; break;
-				case 28: kalahBoard[count + 1]='8'; kalahBoard[count]='2'; count +=2; break;
-				case 29: kalahBoard[count + 1]='9'; kalahBoard[count]='3'; count +=2; break;
-				case 30: kalahBoard[count + 1]='0'; kalahBoard[count]='3'; count +=2; break;
-				case 31: kalahBoard[count + 1]='1'; kalahBoard[count]='3'; count +=2; break;
-				case 32: kalahBoard[count + 1]='2'; kalahBoard[count]='3'; count +=2; break;
-				case 33: kalahBoard[count + 1]='3'; kalahBoard[count]='3'; count +=2; break;
-				case 34: kalahBoard[count + 1]='4'; kalahBoard[count]='3'; count +=2; break;
-				case 35: kalahBoard[count + 1]='5'; kalahBoard[count]='3'; count +=2; break;
-				case 36: kalahBoard[count + 1]='6'; kalahBoard[count]='3'; count +=2; break;
-				case 37: kalahBoard[count + 1]='7'; kalahBoard[count]='3'; count +=2; break;
-				case 38: kalahBoard[count + 1]='8'; kalahBoard[count]='3'; count +=2; break;
-				case 39: kalahBoard[count + 1]='9'; kalahBoard[count]='3'; count +=2; break;
-				case 40: kalahBoard[count + 1]='0'; kalahBoard[count]='4'; count +=2; break;
-				case 41: kalahBoard[count + 1]='1'; kalahBoard[count]='4'; count +=2; break;
-				case 42: kalahBoard[count + 1]='2'; kalahBoard[count]='4'; count +=2; break;
-				case 43: kalahBoard[count + 1]='3'; kalahBoard[count]='4'; count +=2; break;
-				case 44: kalahBoard[count + 1]='4'; kalahBoard[count]='4'; count +=2; break;
-				case 45: kalahBoard[count + 1]='5'; kalahBoard[count]='4'; count +=2; break;
-				case 46: kalahBoard[count + 1]='6'; kalahBoard[count]='4'; count +=2; break;
-				case 47: kalahBoard[count + 1]='7'; kalahBoard[count]='4'; count +=2; break;
-				case 48: kalahBoard[count + 1]='8'; kalahBoard[count]='4'; count +=2; break;
-				case 49: kalahBoard[count + 1]='9'; kalahBoard[count]='4'; count +=2; break;
-				case 50: kalahBoard[count + 1]='0'; kalahBoard[count]='5'; count +=2; break;
-				case 51: kalahBoard[count + 1]='1'; kalahBoard[count]='5'; count +=2; break;
-				case 52: kalahBoard[count + 1]='2'; kalahBoard[count]='5'; count +=2; break;
-				case 53: kalahBoard[count + 1]='3'; kalahBoard[count]='5'; count +=2; break;
-				case 54: kalahBoard[count + 1]='4'; kalahBoard[count]='5'; count +=2; break;
-				case 55: kalahBoard[count + 1]='5'; kalahBoard[count]='5'; count +=2; break;
-				case 56: kalahBoard[count + 1]='6'; kalahBoard[count]='5'; count +=2; break;
-				case 57: kalahBoard[count + 1]='7'; kalahBoard[count]='5'; count +=2; break;
-				case 58: kalahBoard[count + 1]='8'; kalahBoard[count]='5'; count +=2; break;
-				case 59: kalahBoard[count + 1]='9'; kalahBoard[count]='5'; count +=2; break;
-				case 60: kalahBoard[count + 1]='0'; kalahBoard[count]='6'; count +=2; break;
-				case 61: kalahBoard[count + 1]='1'; kalahBoard[count]='6'; count +=2; break;
-				case 62: kalahBoard[count + 1]='2'; kalahBoard[count]='6'; count +=2; break;
-				case 63: kalahBoard[count + 1]='3'; kalahBoard[count]='6'; count +=2; break;
-				case 64: kalahBoard[count + 1]='4'; kalahBoard[count]='6'; count +=2; break;
-				case 65: kalahBoard[count + 1]='5'; kalahBoard[count]='6'; count +=2; break;
-				case 66: kalahBoard[count + 1]='6'; kalahBoard[count]='6'; count +=2; break;
-				case 67: kalahBoard[count + 1]='7'; kalahBoard[count]='6'; count +=2; break;
-				case 68: kalahBoard[count + 1]='8'; kalahBoard[count]='6'; count +=2; break;
-				case 69: kalahBoard[count + 1]='9'; kalahBoard[count]='6'; count +=2; break;
-				case 70: kalahBoard[count + 1]='0'; kalahBoard[count]='7'; count +=2; break;
-				case 71: kalahBoard[count + 1]='1'; kalahBoard[count]='7'; count +=2; break;
-				case 72: kalahBoard[count + 1]='2'; kalahBoard[count]='7'; count +=2; break;
-				}
+			for (boardCounter=0; boardCounter < 7; boardCounter++) {
+					if (initialkalahBoard[boardCounter] == 0) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 1) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 2) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 3) {
+						kalahBoard[count + 1] = '3';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 4) {
+						kalahBoard[count + 1] = '4';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 5) {
+						kalahBoard[count + 1] = '5';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 6) {
+						kalahBoard[count + 1] = '6';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 7) {
+						kalahBoard[count + 1] = '7';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 8) {
+						kalahBoard[count + 1] = '8';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 9) {
+						kalahBoard[count + 1] = '9';
+						kalahBoard[count] = '0';
+					}
+					else if (initialkalahBoard[boardCounter] == 10) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 11) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 12) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 13) {
+						kalahBoard[count + 1] = '3';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 14) {
+						kalahBoard[count + 1] = '4';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 15) {
+						kalahBoard[count + 1] = '5';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 16) {
+						kalahBoard[count + 1] = '6';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 17) {
+						kalahBoard[count + 1] = '7';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 18) {
+						kalahBoard[count + 1] = '8';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 19) {
+						kalahBoard[count + 1] = '9';
+						kalahBoard[count] = '1';
+					}
+					else if (initialkalahBoard[boardCounter] == 20) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 21) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 22) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 23) {
+						kalahBoard[count + 1] = '3';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 24) {
+						kalahBoard[count + 1] = '4';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 25) {
+						kalahBoard[count + 1] = '5';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 26) {
+						kalahBoard[count + 1] = '6';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 27) {
+						kalahBoard[count + 1] = '7';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 28) {
+						kalahBoard[count + 1] = '8';
+						kalahBoard[count] = '2';
+					}
+					else if (initialkalahBoard[boardCounter] == 29) {
+						kalahBoard[count + 1] = '9';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 30) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 31) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 32) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 33) {
+						kalahBoard[count + 1] = '3';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 34) {
+						kalahBoard[count + 1] = '4';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 35) {
+						kalahBoard[count + 1] = '5';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 36) {
+						kalahBoard[count + 1] = '6';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 37) {
+						kalahBoard[count + 1] = '7';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 38) {
+						kalahBoard[count + 1] = '8';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 39) {
+						kalahBoard[count + 1] = '9';
+						kalahBoard[count] = '3';
+					}
+					else if (initialkalahBoard[boardCounter] == 40) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 41) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 42) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 43) {
+						kalahBoard[count + 1] = '3';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 44) {
+						kalahBoard[count + 1] = '4';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 45) {
+						kalahBoard[count + 1] = '5';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 46) {
+						kalahBoard[count + 1] = '6';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 47) {
+						kalahBoard[count + 1] = '7';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 48) {
+						kalahBoard[count + 1] = '8';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 49) {
+						kalahBoard[count + 1] = '9';
+						kalahBoard[count] = '4';
+					}
+					else if (initialkalahBoard[boardCounter] == 50) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 51) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 52) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 53) {
+						kalahBoard[count + 1] = '3';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 54) {
+						kalahBoard[count + 1] = '4';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 55) {
+						kalahBoard[count + 1] = '5';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 56) {
+						kalahBoard[count + 1] = '6';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 57) {
+						kalahBoard[count + 1] = '7';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 58) {
+						kalahBoard[count + 1] = '8';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 59) {
+						kalahBoard[count + 1] = '9';
+						kalahBoard[count] = '5';
+					}
+					else if (initialkalahBoard[boardCounter] == 60) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 61) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 62) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 63) {
+						kalahBoard[count + 1] = '3';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 64) {
+						kalahBoard[count + 1] = '4';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 65) {
+						kalahBoard[count + 1] = '5';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 66) {
+						kalahBoard[count + 1] = '6';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 67) {
+						kalahBoard[count + 1] = '7';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 68) {
+						kalahBoard[count + 1] = '8';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 69) {
+						kalahBoard[count + 1] = '9';
+						kalahBoard[count] = '6';
+					}
+					else if (initialkalahBoard[boardCounter] == 70) {
+						kalahBoard[count + 1] = '0';
+						kalahBoard[count] = '7';
+					}
+					else if (initialkalahBoard[boardCounter] == 71) {
+						kalahBoard[count + 1] = '1';
+						kalahBoard[count] = '7';
+					}
+					else if (initialkalahBoard[boardCounter] == 72) {
+						kalahBoard[count + 1] = '2';
+						kalahBoard[count] = '7';
+					}
+					count += 2;
+
+
 			}
 
-			for (k=7; k < 13; k++) {
-				switch (initialkalahBoard[k]) {
-				case 1: kalahBoard[count + 1]='0'; kalahBoard[count]='1'; count +=2; break;
-				case 2: kalahBoard[count + 1]='0'; kalahBoard[count]='2'; count +=2; break;
-				case 3: kalahBoard[count + 1]='0'; kalahBoard[count]='3'; count +=2; break;
-				case 4: kalahBoard[count + 1]='0'; kalahBoard[count]='4'; count +=2; break;
-				case 5: kalahBoard[count + 1]='0'; kalahBoard[count]='5'; count +=2; break;
-				case 6: kalahBoard[count + 1]='0'; kalahBoard[count]='6'; count +=2; break;
-				case 7: kalahBoard[count + 1]='0'; kalahBoard[count]='7'; count +=2; break;
-				case 8: kalahBoard[count + 1]='0'; kalahBoard[count]='8'; count +=2; break;
-				case 9: kalahBoard[count + 1]='0'; kalahBoard[count]='9'; count +=2; break;
-				case 0: kalahBoard[count + 1]='0'; kalahBoard[count]='0'; count +=2; break;
-				case 10: kalahBoard[count + 1]='1'; kalahBoard[count]='0'; count +=2; break;
-				case 11: kalahBoard[count + 1]='1'; kalahBoard[count]='1'; count +=2; break;
-				case 12: kalahBoard[count + 1]='1'; kalahBoard[count]='2'; count +=2; break;
-				case 13: kalahBoard[count + 1]='1'; kalahBoard[count]='3'; count +=2; break;
-				case 14: kalahBoard[count + 1]='1'; kalahBoard[count]='4'; count +=2; break;
-				case 15: kalahBoard[count + 1]='1'; kalahBoard[count]='5'; count +=2; break;
-				case 16: kalahBoard[count + 1]='1'; kalahBoard[count]='6'; count +=2; break;
-				case 17: kalahBoard[count + 1]='1'; kalahBoard[count]='7'; count +=2; break;
-				case 18: kalahBoard[count + 1]='1'; kalahBoard[count]='8'; count +=2; break;
-				case 19: kalahBoard[count + 1]='1'; kalahBoard[count]='9'; count +=2; break;
-				case 20: kalahBoard[count + 1]='2'; kalahBoard[count]='0'; count +=2; break;
-				case 21: kalahBoard[count + 1]='2'; kalahBoard[count]='1'; count +=2; break;
-				case 22: kalahBoard[count + 1]='2'; kalahBoard[count]='2'; count +=2; break;
-				case 23: kalahBoard[count + 1]='2'; kalahBoard[count]='3'; count +=2; break;
-				case 24: kalahBoard[count + 1]='2'; kalahBoard[count]='4'; count +=2; break;
-				case 25: kalahBoard[count + 1]='2'; kalahBoard[count]='5'; count +=2; break;
-				case 26: kalahBoard[count + 1]='2'; kalahBoard[count]='6'; count +=2; break;
-				case 27: kalahBoard[count + 1]='2'; kalahBoard[count]='7'; count +=2; break;
-				case 28: kalahBoard[count + 1]='2'; kalahBoard[count]='8'; count +=2; break;
-				case 29: kalahBoard[count + 1]='2'; kalahBoard[count]='9'; count +=2; break;
-				case 30: kalahBoard[count + 1]='3'; kalahBoard[count]='0'; count +=2; break;
-				case 31: kalahBoard[count + 1]='3'; kalahBoard[count]='1'; count +=2; break;
-				case 32: kalahBoard[count + 1]='3'; kalahBoard[count]='2'; count +=2; break;
-				case 33: kalahBoard[count + 1]='3'; kalahBoard[count]='3'; count +=2; break;
-				case 34: kalahBoard[count + 1]='3'; kalahBoard[count]='4'; count +=2; break;
-				case 35: kalahBoard[count + 1]='3'; kalahBoard[count]='5'; count +=2; break;
-				case 36: kalahBoard[count + 1]='3'; kalahBoard[count]='6'; count +=2; break;
-				case 37: kalahBoard[count + 1]='3'; kalahBoard[count]='7'; count +=2; break;
-				case 38: kalahBoard[count + 1]='3'; kalahBoard[count]='8'; count +=2; break;
-				case 39: kalahBoard[count + 1]='3'; kalahBoard[count]='9'; count +=2; break;
-				case 40: kalahBoard[count + 1]='4'; kalahBoard[count]='0'; count +=2; break;
-				case 41: kalahBoard[count + 1]='4'; kalahBoard[count]='1'; count +=2; break;
-				case 42: kalahBoard[count + 1]='4'; kalahBoard[count]='2'; count +=2; break;
-				case 43: kalahBoard[count + 1]='4'; kalahBoard[count]='3'; count +=2; break;
-				case 44: kalahBoard[count + 1]='4'; kalahBoard[count]='4'; count +=2; break;
-				case 45: kalahBoard[count + 1]='4'; kalahBoard[count]='5'; count +=2; break;
-				case 46: kalahBoard[count + 1]='4'; kalahBoard[count]='6'; count +=2; break;
-				case 47: kalahBoard[count + 1]='4'; kalahBoard[count]='7'; count +=2; break;
-				case 48: kalahBoard[count + 1]='4'; kalahBoard[count]='8'; count +=2; break;
-				case 49: kalahBoard[count + 1]='4'; kalahBoard[count]='9'; count +=2; break;
-				case 50: kalahBoard[count + 1]='5'; kalahBoard[count]='0'; count +=2; break;
-				case 51: kalahBoard[count + 1]='5'; kalahBoard[count]='1'; count +=2; break;
-				case 52: kalahBoard[count + 1]='5'; kalahBoard[count]='2'; count +=2; break;
-				case 53: kalahBoard[count + 1]='5'; kalahBoard[count]='3'; count +=2; break;
-				case 54: kalahBoard[count + 1]='5'; kalahBoard[count]='4'; count +=2; break;
-				case 55: kalahBoard[count + 1]='5'; kalahBoard[count]='5'; count +=2; break;
-				case 56: kalahBoard[count + 1]='5'; kalahBoard[count]='6'; count +=2; break;
-				case 57: kalahBoard[count + 1]='5'; kalahBoard[count]='7'; count +=2; break;
-				case 58: kalahBoard[count + 1]='5'; kalahBoard[count]='8'; count +=2; break;
-				case 59: kalahBoard[count + 1]='5'; kalahBoard[count]='9'; count +=2; break;
-				case 60: kalahBoard[count + 1]='6'; kalahBoard[count]='0'; count +=2; break;
-				case 61: kalahBoard[count + 1]='6'; kalahBoard[count]='1'; count +=2; break;
-				case 62: kalahBoard[count + 1]='6'; kalahBoard[count]='2'; count +=2; break;
-				case 63: kalahBoard[count + 1]='6'; kalahBoard[count]='3'; count +=2; break;
-				case 64: kalahBoard[count + 1]='6'; kalahBoard[count]='4'; count +=2; break;
-				case 65: kalahBoard[count + 1]='6'; kalahBoard[count]='5'; count +=2; break;
-				case 66: kalahBoard[count + 1]='6'; kalahBoard[count]='6'; count +=2; break;
-				case 67: kalahBoard[count + 1]='6'; kalahBoard[count]='7'; count +=2; break;
-				case 68: kalahBoard[count + 1]='6'; kalahBoard[count]='8'; count +=2; break;
-				case 69: kalahBoard[count + 1]='6'; kalahBoard[count]='9'; count +=2; break;
-				case 70: kalahBoard[count + 1]='7'; kalahBoard[count]='0'; count +=2; break;
-				case 71: kalahBoard[count + 1]='7'; kalahBoard[count]='1'; count +=2; break;
-				case 72: kalahBoard[count + 1]='7'; kalahBoard[count]='2'; count +=2; break;
+			for (boardCounter =7; boardCounter < 13; boardCounter++) {
+				if (initialkalahBoard[boardCounter] == 0) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '0';
 				}
-			}
-			for (k; k < 14; k++) {
-				switch (initialkalahBoard[k]) {
-				case 1: kalahBoard[count + 1]='1'; kalahBoard[count]='0'; count +=2; break;
-				case 2: kalahBoard[count + 1]='2'; kalahBoard[count]='0'; count +=2; break;
-				case 3: kalahBoard[count + 1]='3'; kalahBoard[count]='0'; count +=2; break;
-				case 4: kalahBoard[count + 1]='4'; kalahBoard[count]='0'; count +=2; break;
-				case 5: kalahBoard[count + 1]='5'; kalahBoard[count]='0'; count +=2; break;
-				case 6: kalahBoard[count + 1]='6'; kalahBoard[count]='0'; count +=2; break;
-				case 7: kalahBoard[count + 1]='7'; kalahBoard[count]='0'; count +=2; break;
-				case 8: kalahBoard[count + 1]='8'; kalahBoard[count]='0'; count +=2; break;
-				case 9: kalahBoard[count + 1]='9'; kalahBoard[count]='0'; count +=2; break;
-				case 0: kalahBoard[count + 1]='0'; kalahBoard[count]='0'; count +=2; break;
-				case 10: kalahBoard[count + 1]='0'; kalahBoard[count]='1'; count +=2; break;
-				case 11: kalahBoard[count + 1]='1'; kalahBoard[count]='1'; count +=2; break;
-				case 12: kalahBoard[count + 1]='2'; kalahBoard[count]='1'; count +=2; break;
-				case 13: kalahBoard[count + 1]='3'; kalahBoard[count]='1'; count +=2; break;
-				case 14: kalahBoard[count + 1]='4'; kalahBoard[count]='1'; count +=2; break;
-				case 15: kalahBoard[count + 1]='5'; kalahBoard[count]='1'; count +=2; break;
-				case 16: kalahBoard[count + 1]='6'; kalahBoard[count]='1'; count +=2; break;
-				case 17: kalahBoard[count + 1]='7'; kalahBoard[count]='1'; count +=2; break;
-				case 18: kalahBoard[count + 1]='8'; kalahBoard[count]='1'; count +=2; break;
-				case 19: kalahBoard[count + 1]='9'; kalahBoard[count]='1'; count +=2; break;
-				case 20: kalahBoard[count + 1]='0'; kalahBoard[count]='2'; count +=2; break;
-				case 21: kalahBoard[count + 1]='1'; kalahBoard[count]='2'; count +=2; break;
-				case 22: kalahBoard[count + 1]='2'; kalahBoard[count]='2'; count +=2; break;
-				case 23: kalahBoard[count + 1]='3'; kalahBoard[count]='2'; count +=2; break;
-				case 24: kalahBoard[count + 1]='4'; kalahBoard[count]='2'; count +=2; break;
-				case 25: kalahBoard[count + 1]='5'; kalahBoard[count]='2'; count +=2; break;
-				case 26: kalahBoard[count + 1]='6'; kalahBoard[count]='2'; count +=2; break;
-				case 27: kalahBoard[count + 1]='7'; kalahBoard[count]='2'; count +=2; break;
-				case 28: kalahBoard[count + 1]='8'; kalahBoard[count]='2'; count +=2; break;
-				case 29: kalahBoard[count + 1]='9'; kalahBoard[count]='3'; count +=2; break;
-				case 30: kalahBoard[count + 1]='0'; kalahBoard[count]='3'; count +=2; break;
-				case 31: kalahBoard[count + 1]='1'; kalahBoard[count]='3'; count +=2; break;
-				case 32: kalahBoard[count + 1]='2'; kalahBoard[count]='3'; count +=2; break;
-				case 33: kalahBoard[count + 1]='3'; kalahBoard[count]='3'; count +=2; break;
-				case 34: kalahBoard[count + 1]='4'; kalahBoard[count]='3'; count +=2; break;
-				case 35: kalahBoard[count + 1]='5'; kalahBoard[count]='3'; count +=2; break;
-				case 36: kalahBoard[count + 1]='6'; kalahBoard[count]='3'; count +=2; break;
-				case 37: kalahBoard[count + 1]='7'; kalahBoard[count]='3'; count +=2; break;
-				case 38: kalahBoard[count + 1]='8'; kalahBoard[count]='3'; count +=2; break;
-				case 39: kalahBoard[count + 1]='9'; kalahBoard[count]='3'; count +=2; break;
-				case 40: kalahBoard[count + 1]='0'; kalahBoard[count]='4'; count +=2; break;
-				case 41: kalahBoard[count + 1]='1'; kalahBoard[count]='4'; count +=2; break;
-				case 42: kalahBoard[count + 1]='2'; kalahBoard[count]='4'; count +=2; break;
-				case 43: kalahBoard[count + 1]='3'; kalahBoard[count]='4'; count +=2; break;
-				case 44: kalahBoard[count + 1]='4'; kalahBoard[count]='4'; count +=2; break;
-				case 45: kalahBoard[count + 1]='5'; kalahBoard[count]='4'; count +=2; break;
-				case 46: kalahBoard[count + 1]='6'; kalahBoard[count]='4'; count +=2; break;
-				case 47: kalahBoard[count + 1]='7'; kalahBoard[count]='4'; count +=2; break;
-				case 48: kalahBoard[count + 1]='8'; kalahBoard[count]='4'; count +=2; break;
-				case 49: kalahBoard[count + 1]='9'; kalahBoard[count]='4'; count +=2; break;
-				case 50: kalahBoard[count + 1]='0'; kalahBoard[count]='5'; count +=2; break;
-				case 51: kalahBoard[count + 1]='1'; kalahBoard[count]='5'; count +=2; break;
-				case 52: kalahBoard[count + 1]='2'; kalahBoard[count]='5'; count +=2; break;
-				case 53: kalahBoard[count + 1]='3'; kalahBoard[count]='5'; count +=2; break;
-				case 54: kalahBoard[count + 1]='4'; kalahBoard[count]='5'; count +=2; break;
-				case 55: kalahBoard[count + 1]='5'; kalahBoard[count]='5'; count +=2; break;
-				case 56: kalahBoard[count + 1]='6'; kalahBoard[count]='5'; count +=2; break;
-				case 57: kalahBoard[count + 1]='7'; kalahBoard[count]='5'; count +=2; break;
-				case 58: kalahBoard[count + 1]='8'; kalahBoard[count]='5'; count +=2; break;
-				case 59: kalahBoard[count + 1]='9'; kalahBoard[count]='5'; count +=2; break;
-				case 60: kalahBoard[count + 1]='0'; kalahBoard[count]='6'; count +=2; break;
-				case 61: kalahBoard[count + 1]='1'; kalahBoard[count]='6'; count +=2; break;
-				case 62: kalahBoard[count + 1]='2'; kalahBoard[count]='6'; count +=2; break;
-				case 63: kalahBoard[count + 1]='3'; kalahBoard[count]='6'; count +=2; break;
-				case 64: kalahBoard[count + 1]='4'; kalahBoard[count]='6'; count +=2; break;
-				case 65: kalahBoard[count + 1]='5'; kalahBoard[count]='6'; count +=2; break;
-				case 66: kalahBoard[count + 1]='6'; kalahBoard[count]='6'; count +=2; break;
-				case 67: kalahBoard[count + 1]='7'; kalahBoard[count]='6'; count +=2; break;
-				case 68: kalahBoard[count + 1]='8'; kalahBoard[count]='6'; count +=2; break;
-				case 69: kalahBoard[count + 1]='9'; kalahBoard[count]='6'; count +=2; break;
-				case 70: kalahBoard[count + 1]='0'; kalahBoard[count]='7'; count +=2; break;
-				case 71: kalahBoard[count + 1]='1'; kalahBoard[count]='7'; count +=2; break;
-				case 72: kalahBoard[count + 1]='2'; kalahBoard[count]='7'; count +=2; break;
+				else if (initialkalahBoard[boardCounter] == 1) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '1';
 				}
+				else if (initialkalahBoard[boardCounter] == 2) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 3) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 4) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 5) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 6) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 7) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 8) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '8';
+				}
+				else if (initialkalahBoard[boardCounter] == 9) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '9';
+				}
+				else if (initialkalahBoard[boardCounter] == 10) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 11) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 12) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 13) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 14) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 15) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 16) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 17) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 18) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '8';
+				}
+				else if (initialkalahBoard[boardCounter] == 19) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '9';
+				}
+				else if (initialkalahBoard[boardCounter] == 20) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 21) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 22) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 23) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 24) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 25) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 26) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 27) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 28) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '8';
+				}
+				else if (initialkalahBoard[boardCounter] == 29) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '9';
+				}
+				else if (initialkalahBoard[boardCounter] == 30) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 31) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 32) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 33) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 34) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 35) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 36) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 37) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 38) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '8';
+				}
+				else if (initialkalahBoard[boardCounter] == 39) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '9';
+				}
+				else if (initialkalahBoard[boardCounter] == 40) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 41) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 42) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 43) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 44) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 45) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 46) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 47) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 48) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '8';
+				}
+				else if (initialkalahBoard[boardCounter] == 49) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '9';
+				}
+				else if (initialkalahBoard[boardCounter] == 50) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 51) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 52) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 53) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 54) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 55) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 56) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 57) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 58) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '8';
+				}
+				else if (initialkalahBoard[boardCounter] == 59) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '9';
+				}
+				else if (initialkalahBoard[boardCounter] == 60) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 61) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 62) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 63) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 64) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 65) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 66) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 67) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 68) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '8';
+				}
+				else if (initialkalahBoard[boardCounter] == 69) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '9';
+				}
+				else if (initialkalahBoard[boardCounter] == 70) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 71) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 72) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '2';
+				}
+				count += 2;
 			}
+			
+
+			for (boardCounter; boardCounter < 14; boardCounter++) {
+				if (initialkalahBoard[boardCounter] == 0) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 1) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 2) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 3) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 4) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 5) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 6) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 7) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 8) {
+					kalahBoard[count + 1] = '8';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 9) {
+					kalahBoard[count + 1] = '9';
+					kalahBoard[count] = '0';
+				}
+				else if (initialkalahBoard[boardCounter] == 10) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 11) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 12) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 13) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 14) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 15) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 16) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 17) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 18) {
+					kalahBoard[count + 1] = '8';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 19) {
+					kalahBoard[count + 1] = '9';
+					kalahBoard[count] = '1';
+				}
+				else if (initialkalahBoard[boardCounter] == 20) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 21) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 22) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 23) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 24) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 25) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 26) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 27) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 28) {
+					kalahBoard[count + 1] = '8';
+					kalahBoard[count] = '2';
+				}
+				else if (initialkalahBoard[boardCounter] == 29) {
+					kalahBoard[count + 1] = '9';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 30) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 31) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 32) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 33) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 34) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 35) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 36) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 37) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 38) {
+					kalahBoard[count + 1] = '8';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 39) {
+					kalahBoard[count + 1] = '9';
+					kalahBoard[count] = '3';
+				}
+				else if (initialkalahBoard[boardCounter] == 40) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 41) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 42) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 43) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 44) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 45) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 46) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 47) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 48) {
+					kalahBoard[count + 1] = '8';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 49) {
+					kalahBoard[count + 1] = '9';
+					kalahBoard[count] = '4';
+				}
+				else if (initialkalahBoard[boardCounter] == 50) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 51) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 52) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 53) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 54) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 55) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 56) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 57) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 58) {
+					kalahBoard[count + 1] = '8';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 59) {
+					kalahBoard[count + 1] = '9';
+					kalahBoard[count] = '5';
+				}
+				else if (initialkalahBoard[boardCounter] == 60) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 61) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 62) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 63) {
+					kalahBoard[count + 1] = '3';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 64) {
+					kalahBoard[count + 1] = '4';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 65) {
+					kalahBoard[count + 1] = '5';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 66) {
+					kalahBoard[count + 1] = '6';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 67) {
+					kalahBoard[count + 1] = '7';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 68) {
+					kalahBoard[count + 1] = '8';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 69) {
+					kalahBoard[count + 1] = '9';
+					kalahBoard[count] = '6';
+				}
+				else if (initialkalahBoard[boardCounter] == 70) {
+					kalahBoard[count + 1] = '0';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 71) {
+					kalahBoard[count + 1] = '1';
+					kalahBoard[count] = '7';
+				}
+				else if (initialkalahBoard[boardCounter] == 72) {
+					kalahBoard[count + 1] = '2';
+					kalahBoard[count] = '7';
+				}
+				count += 2;
+	}
 
 
 			
@@ -1007,14 +1665,14 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 			kalahBoard[count]='\n';
 
 			// Initialize counters and arrays for formatting the output
-			k=0;
+			boardCounter =0;
 			int currentArrayPositionCounter=0;
 			int currentkalahBoardPositionCounter=0;
 			char textForRightPits[50]=""; // Array to store formatted text for the bottom part of the kalahBoard
 
 			// Process the first part of the kalahBoard (textForRightPits)
 			currentArrayPositionCounter=0;
-			for (k; k < 6; k++) {
+			for (boardCounter; boardCounter < 6; boardCounter++) {
 				// If length is 1, add a single character followed by a space
 				
 					textForRightPits[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
@@ -1029,7 +1687,7 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 			// Initialize and format the text for the right part of the kalahBoard (bottomKalah)
 			char bottomKalah[50]="";
 			currentArrayPositionCounter=0;
-			for (k; k < 7; k++) {
+			for (boardCounter; boardCounter < 7; boardCounter++) {
 				// Similar processing as above but including spaces between two-character entries
 					bottomKalah[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
 					bottomKalah[currentArrayPositionCounter + 1]=kalahBoard[currentkalahBoardPositionCounter + 1];
@@ -1042,7 +1700,7 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 			// Initialize and format the text for the top part of the kalahBoard (textForLeftPits)
 			currentArrayPositionCounter=0;
 			char textForLeftPits[50]="";
-			for (k; k < 13; k++) {
+			for (boardCounter; boardCounter < 13; boardCounter++) {
 				textForLeftPits[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
 				textForLeftPits[currentArrayPositionCounter + 1]=kalahBoard[currentkalahBoardPositionCounter + 1];
 				textForLeftPits[currentArrayPositionCounter + 2]='\n'; // Properly add newline here
@@ -1054,7 +1712,7 @@ Controls how rendering operations are executed, including shaders, buffers, and 
 			// Initialize and format the text for the left part of the kalahBoard (topKalah)
 			char topKalah[50]="";
 			currentArrayPositionCounter=0;
-			for (k; k < 14; k++) {
+			for (boardCounter; boardCounter < 14; boardCounter++) {
 				
 					topKalah[currentArrayPositionCounter]=kalahBoard[currentkalahBoardPositionCounter];
 					topKalah[currentArrayPositionCounter + 1]=kalahBoard[currentkalahBoardPositionCounter + 1];
