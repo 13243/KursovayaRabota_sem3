@@ -632,7 +632,7 @@ void displayGameButtons()
 
 	// Loop through each button in the `gameButtons` array and display it
 	// There are 12 buttons in the array
-
+	
 	displayButton(gameButtons[0]);
 	displayButton(gameButtons[1]);
 	displayButton(gameButtons[2]);
@@ -673,12 +673,6 @@ void displaySecondaryMenu()
 
 	// Loop through the buttons from index 6 to 11 and display them
 	// These are the buttons for the secondary menu
-	displayButton(gameButtons[0]);
-	displayButton(gameButtons[1]);
-	displayButton(gameButtons[2]);
-	displayButton(gameButtons[3]);
-	displayButton(gameButtons[4]);
-	displayButton(gameButtons[5]);
 	displayButton(gameButtons[6]);
 	displayButton(gameButtons[7]);
 	displayButton(gameButtons[8]);
