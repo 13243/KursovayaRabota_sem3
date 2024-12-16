@@ -632,8 +632,20 @@ void displayGameButtons()
 
 	// Loop through each button in the `gameButtons` array and display it
 	// There are 12 buttons in the array
-	for (int i=0; i < 12; i++) // btnCnt=12
-		displayButton(gameButtons[i]);
+
+	displayButton(gameButtons[0]);
+	displayButton(gameButtons[1]);
+	displayButton(gameButtons[2]);
+	displayButton(gameButtons[3]);
+	displayButton(gameButtons[4]);
+	displayButton(gameButtons[5]);
+	displayButton(gameButtons[6]);
+	displayButton(gameButtons[7]);
+	displayButton(gameButtons[8]);
+	displayButton(gameButtons[9]);
+	displayButton(gameButtons[10]);
+	displayButton(gameButtons[11]);
+
 
 	// Restore the previous matrix state
 	glPopMatrix();
@@ -661,8 +673,18 @@ void displaySecondaryMenu()
 
 	// Loop through the buttons from index 6 to 11 and display them
 	// These are the buttons for the secondary menu
-	for (int i=6; i < 12; i++) // btnCnt=6 (buttons from index 6 to 11)
-		displayButton(gameButtons[i]);
+	displayButton(gameButtons[0]);
+	displayButton(gameButtons[1]);
+	displayButton(gameButtons[2]);
+	displayButton(gameButtons[3]);
+	displayButton(gameButtons[4]);
+	displayButton(gameButtons[5]);
+	displayButton(gameButtons[6]);
+	displayButton(gameButtons[7]);
+	displayButton(gameButtons[8]);
+	displayButton(gameButtons[9]);
+	displayButton(gameButtons[10]);
+	displayButton(gameButtons[11]);
 
 	// Restore the previous matrix state
 	glPopMatrix();
