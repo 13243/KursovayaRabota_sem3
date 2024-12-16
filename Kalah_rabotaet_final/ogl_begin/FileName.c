@@ -8,7 +8,7 @@
 #include <windows.h>
 #include <time.h>
 #include <C:\Users\katle\OneDrive\Desktop\CS\CS_sem2\Калахи\New Kalah\Kalah_rabotaet_final\stb_easy_font.h>
-
+//  check to see if it works
 #pragma comment(lib, "opengl32.lib") // Link the OpenGL library
 //will this comment show up as change in github?
 int currentTurn=1;
