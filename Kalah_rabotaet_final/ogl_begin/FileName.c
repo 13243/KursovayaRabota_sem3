@@ -1008,70 +1008,18 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		if (currentPlayerResponse == 1) {
 			// If the game is in player vs player mode
 			for (int i=0; i < 12; i++) {
-				// Iterate through the set of game buttons
-				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
-					// Check if the mouse click is within one of the game buttons
-					if ((strcmp(gameButtons[i].buttonName, "B1") == 0) && (side == B) && (initialkalahBoard[12] != 0)) {
-						// If button "11" is clicked for side B and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 13);
-						checkEmpty=checkEmptySide(initialkalahBoard);
+					if (strcmp(gameButtons[i].buttonName, "B1") == 0 || strcmp(gameButtons[i].buttonName, "B2") == 0 ||
+						strcmp(gameButtons[i].buttonName, "B3") == 0 || (strcmp(gameButtons[i].buttonName, "B4") == 0 ||
+							strcmp(gameButtons[i].buttonName, "B5") == 0 || strcmp(gameButtons[i].buttonName, "B6") == 0 &&
+							(side == B && initialkalahBoard[13-atoi(&gameButtons[i].buttonName)]))) {
+						int output = performTurn(initialkalahBoard,14- atoi(&gameButtons[i].buttonName));
+						checkEmpty = checkEmptySide(initialkalahBoard);
 						if (output == 0) {
 							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
+							side = (side == A) ? B : A;
 
 						}
 					}
-					if ((strcmp(gameButtons[i].buttonName, "B2") == 0) && (side == B) && (initialkalahBoard[11] != 0)) {
-						// If button "12" is clicked for side B and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 12);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "B3") == 0) && (side == B) && (initialkalahBoard[10] != 0)) {
-						// If button "13" is clicked for side B and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 11);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "B4") == 0) && (side == B) && (initialkalahBoard[9] != 0)) {
-						// If button "14" is clicked for side B and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 10);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "B5") == 0) && (side == B) && (initialkalahBoard[8] != 0)) {
-						// If button "15" is clicked for side B and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 9);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "B6") == 0) && (side == B) && (initialkalahBoard[7] != 0)) {
-						// If button "16" is clicked for side B and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 8);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-
 					if (strcmp(gameButtons[i].buttonName, "A1") == 0 || strcmp(gameButtons[i].buttonName, "A2") == 0 ||
 						strcmp(gameButtons[i].buttonName, "A3") == 0 || (strcmp(gameButtons[i].buttonName, "A4") == 0 ||
 							strcmp(gameButtons[i].buttonName, "A5") == 0 || strcmp(gameButtons[i].buttonName, "A6") == 0 &&
@@ -1083,11 +1031,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 							side = (side == A) ? B : A;
 
 						}
-
 					}
-
-
-				}
 			}
 		}
 		else if (currentPlayerResponse == 0 || currentPlayerResponse == 2) {
@@ -1140,63 +1084,15 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 				// Iterate through the set of game buttons
 				if (isPointInButton(LOWORD(lParam), HIWORD(lParam), gameButtons[i])) {
 					// Check if the mouse click is within one of the game buttons
-					if ((strcmp(gameButtons[i].buttonName, "A1") == 0) && (side == A)  && (initialkalahBoard[0] != 0)) {
-						// If button "21" is clicked for side A, after start, and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 1);
-						checkEmpty=checkEmptySide(initialkalahBoard);
+					if (strcmp(gameButtons[i].buttonName, "A1") == 0 || strcmp(gameButtons[i].buttonName, "A2") == 0 ||
+						strcmp(gameButtons[i].buttonName, "A3") == 0 || (strcmp(gameButtons[i].buttonName, "A4") == 0 ||
+							strcmp(gameButtons[i].buttonName, "A5") == 0 || strcmp(gameButtons[i].buttonName, "A6") == 0 &&
+							(side == A && initialkalahBoard[atoi(&gameButtons[i].buttonName) - 1]))) {
+						int output = performTurn(initialkalahBoard, atoi(&gameButtons[i].buttonName));
+						checkEmpty = checkEmptySide(initialkalahBoard);
 						if (output == 0) {
 							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "A2") == 0) && (side == A) && (initialkalahBoard[1] != 0)) {
-						// If button "22" is clicked for side A and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 2);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "A3") == 0) && (side == A) && (initialkalahBoard[2] != 0)) {
-						// If button "23" is clicked for side A and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 3);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "A4") == 0) && (side == A) && (initialkalahBoard[3] != 0)) {
-						// If button "24" is clicked for side A and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 4);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "A5") == 0) && (side == A) && (initialkalahBoard[4] != 0)) {
-						// If button "25" is clicked for side A and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 5);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
-
-						}
-					}
-					if ((strcmp(gameButtons[i].buttonName, "A6") == 0) && (side == A) && (initialkalahBoard[5] != 0)) {
-						// If button "26" is clicked for side A and there are seeds to play, perform the turn and check for side switch
-						int output=performTurn(initialkalahBoard, 6);
-						checkEmpty=checkEmptySide(initialkalahBoard);
-						if (output == 0) {
-							// Switch sides if turn is valid
-							side=(side == A) ? B : A;
+							side = (side == A) ? B : A;
 
 						}
 					}
