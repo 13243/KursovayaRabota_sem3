@@ -18,7 +18,7 @@ int numCompTurn = 0;
 #define MAX_VALUE 10000
 #define setCursor(x,y) printf("\033[%d;%dH", (y), (x))
 
-#define currentlyTestedlevel 6
+#define currentlyTestedlevel 7
 
 enum difficultyLevel {
 	EASY = currentlyTestedlevel,
